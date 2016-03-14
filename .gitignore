@@ -3,6 +3,8 @@
 **.project
 **.classpath
 **.settings
+**.tscache
 **node_modules
 
+**build
 
