@@ -14,15 +14,17 @@ module.exports = function(grunt) {
                 files: [
                     {src: ["build/server/**/*.ts"]}
                 ],
-                module: "commonjs",
-                target: "ES5",
-                additionalFlags: "--module commonjs -t ES5"
+                options: {
+                    module: "commonjs"
+                }
             },
             frontend: {
                 files: [
                     {src: ["build/public/**/*.ts"]}
                 ],
-                module: "amd"
+                options: {
+                    module: "amd"
+                }
             }
         },
         watch: {
