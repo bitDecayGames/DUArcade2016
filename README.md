@@ -26,3 +26,7 @@ This command starts the node server app.  You will need to open a different wind
 ```node build/server/app.js```
 
 Using these two commands, you will be able to make edits to the files in the /public directory and have them automatically refreshed.  All you have to do is refresh your browser to load them.  It also refreshes the files in the /server directory, but in order to see those changes you will have to manually ```Ctrl+C``` out of the node command and manually re-run it.
+
+## Production
+
+The master branch is deployed at [dev.bytebreakstudios.com:3000](http://dev.bytebreakstudios.com:3000)

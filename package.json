@@ -1,6 +1,35 @@
 {
   "name": "DUArcade2016",
   "version": "0.0.1",
+  "description": "Entry for the DU Arcade of 2016",
+  "homepage": "http://dev.bytebreakstudios.com:3000",
+  "bugs": {
+    "url": "https://github.com/bitDecayGames/DUArcade2016/issues"
+  },
+  "license": "Apache-2.0",
+  "people": [
+    {
+      "name": "Michael Wingfield",
+      "email": "mwingfie@gmail.com"
+    },
+    {
+      "name": "Logan Moore"
+    },
+    {
+      "name": "Jake Caban-Tomski"
+    },
+    {
+      "name": "Jake Fisher"
+    },
+    {
+      "name": "Erik Meredith"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitDecayGames/DUArcade2016.git"
+  },
+  "private": true,
   "dependencies": {
     "express": "^4.13.4"
   },
