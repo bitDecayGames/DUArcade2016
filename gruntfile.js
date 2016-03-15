@@ -27,6 +27,11 @@ module.exports = function(grunt) {
                 }
             }
         },
+        less: {
+            main: {
+                files: [{expand: true, src: ["build/public/css/*.less"], ext: ".css"}]
+            }
+        },
         watch: {
             dev: {
                 files: ["public/**", "server/**"],
@@ -37,11 +42,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-ts");
+    grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask("typescript", ["ts:server", "ts:frontend"]);
 
-    grunt.registerTask("default", ["clean", "copy", "typescript"]);
+    grunt.registerTask("default", ["clean", "copy", "typescript", "less"]);
     grunt.registerTask("dev", ["default", "watch:dev"]);
 
 };

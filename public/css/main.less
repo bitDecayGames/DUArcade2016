@@ -1,0 +1,36 @@
+@img: "../img/";
+@textColor: white;
+
+* {
+  color: @textColor;
+  font-family: monospace;
+}
+
+html, body {
+  width: 100%;
+}
+
+.center {
+  text-align: center;
+}
+
+.centered-div {
+  .center;
+  div {
+    display: inline-block;
+  }
+;
+}
+
+.background {
+  background-image: url("@{img}placeholder-background.jpg");
+  background-size: 100%;
+}
+
+#title {
+  font-size: xx-large;
+}
+
+#contentContainer {
+  padding-top: 60px;
+}
