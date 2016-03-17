@@ -19,6 +19,13 @@ Run ```npm install``` to have npm install all of the dependencies for this proje
 *assumes you have node installed globally
 ```
 
+To install grunt, use command:
+`npm install -g grunt-cli`
+
+Followed by
+`npm install`
+to get it to make your newly installed packages usable.
+
 This command sets up a watch on the files in /public and /server. Open a new command window and run this:
 ```grunt dev```
 
