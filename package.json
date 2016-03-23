@@ -40,6 +40,7 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "^1.2.0",
     "grunt-contrib-watch": "^1.0.0",
+    "grunt-focus": "^0.1.1",
     "grunt-ts": "^5.3.2"
   }
 }

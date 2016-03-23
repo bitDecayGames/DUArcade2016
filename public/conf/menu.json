@@ -1,0 +1,20 @@
+{
+  "buttons": [
+    {
+      "text": "New Game",
+      "state": "new"
+    },
+    {
+      "text": "Load Game",
+      "state": "load"
+    },
+    {
+      "text": "Options",
+      "state": "options"
+    },
+    {
+      "text": "Credits",
+      "state": "credits"
+    }
+  ]
+}

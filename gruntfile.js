@@ -32,10 +32,25 @@ module.exports = function(grunt) {
                 files: [{expand: true, src: ["build/public/css/*.less"], ext: ".css"}]
             }
         },
+        focus: {
+            include: ["ts", "less", "lib", "others"]
+        },
         watch: {
-            dev: {
-                files: ["public/**", "server/**"],
+            ts: {
+                files: ["public/js/**", "server/**"],
+                tasks: ["copy", "typescript"]
+            },
+            less: {
+                files: ["public/css/**"],
+                tasks: ["copy", "less"]
+            },
+            lib: {
+                files: ["public/lib/**"],
                 tasks: ["default"]
+            },
+            others: {
+                files: ["public/**", "!public/js/**", "!public/css/**"],
+                tasks: ["copy"]
             }
         }
     });
@@ -43,11 +58,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-focus');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask("typescript", ["ts:server", "ts:frontend"]);
 
-    grunt.registerTask("default", ["clean", "copy", "typescript", "less"]);
-    grunt.registerTask("dev", ["default", "watch:dev"]);
+    grunt.registerTask("default", ["copy", "typescript", "less"]);
+    grunt.registerTask("dev", ["default", "focus"]);
 
 };
