@@ -12,3 +12,9 @@ window.onload = () => {
 
     game.state.start("init");
 };
+
+/*
+This function swallows the [SPACE], [UP], [DOWN], [LEFT], [RIGHT] keys so that the window
+doesn't scroll around while people are trying to play the game.
+ */
+window.onkeydown = function(e) { return e.keyCode != 32 && e.keyCode != 37 && e.keyCode != 38 && e.keyCode != 39 && e.keyCode != 40; };
