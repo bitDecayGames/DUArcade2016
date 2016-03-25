@@ -1,15 +1,16 @@
 class Player {
-    game: DUArcade2016Game;
-    speed: number = 10;
+    game: Phaser.Game;
+    speed: number = 1;
     input: Input;
     sprite: Phaser.Sprite;
 
-    constructor(game:DUArcade2016Game, input: Input){
+    constructor(game: Phaser.Game, input: Input){
         this.game = game;
         this.input = input;
 
-        this.sprite = game.add.sprite(100, 100, "apple");
-        this.sprite.anchor.setTo(0.5, 0.5);
+        this.sprite = game.add.sprite(0, 0, "apple");
+        this.sprite.anchor.setTo(0, 1);
+        this.sprite.scale.setTo(1, 2);
     }
 
     update(){

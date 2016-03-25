@@ -4,49 +4,44 @@ module.exports = function(grunt) {
         copy: {
             main: {
                 files: [
-                    {expand: true, src: ["public/**"], dest: "build"},
-                    {expand: true, src: ["server/**"], dest: "build"}
+                    {expand: true, src: ["public/**", "!public/js/**", "!public/css/**"], dest: "build"}
                 ]
             }
         },
         ts: {
             server: {
                 files: [
-                    {src: ["build/server/**/*.ts"]}
+                    {src: ["server/**/*.ts"], dest: "build/server"}
                 ],
-                options: {
-                    module: "commonjs"
-                }
+                module: "commonjs"
             },
             frontend: {
                 files: [
-                    {src: ["build/public/**/*.ts"]}
+                    {src: ["public/js/**/*.ts", "public/lib/**/*.ts"], dest: "build/public"}
                 ],
-                options: {
-                    module: "amd"
-                }
+                out: "build/public/js/app.js"
             }
         },
         less: {
             main: {
-                files: [{expand: true, src: ["build/public/css/*.less"], ext: ".css"}]
+                files: [{expand: true, src: ["public/css/*.less"], dest: "build", ext: ".css"}]
             }
         },
         focus: {
-            include: ["ts", "less", "lib", "others"]
+            include: ["frontendTs", "backendTs", "less", "others"]
         },
         watch: {
-            ts: {
-                files: ["public/js/**", "server/**"],
-                tasks: ["copy", "typescript"]
+            frontendTs: {
+                files: ["public/js/**"],
+                tasks: ["ts:frontend"]
+            },
+            backendTs: {
+                files: ["server/**"],
+                tasks: ["ts:server"]
             },
             less: {
                 files: ["public/css/**"],
-                tasks: ["copy", "less"]
-            },
-            lib: {
-                files: ["public/lib/**"],
-                tasks: ["default"]
+                tasks: ["less"]
             },
             others: {
                 files: ["public/**", "!public/js/**", "!public/css/**"],
@@ -63,7 +58,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("typescript", ["ts:server", "ts:frontend"]);
 
-    grunt.registerTask("default", ["copy", "typescript", "less"]);
+    grunt.registerTask("default", ["clean", "copy", "typescript", "less"]);
     grunt.registerTask("dev", ["default", "focus"]);
 
 };
