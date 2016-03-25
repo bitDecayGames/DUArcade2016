@@ -77,6 +77,7 @@ class TestRotationLevel {
             sprite.anchor.setTo(0, 1);
             sprite.x += 150;
             sprite.y += 150;
+            sprite.alpha = 0;
             this.renderGroup.add(sprite);
         });
 
