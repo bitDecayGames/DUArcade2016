@@ -48,7 +48,7 @@
         }
       ]
     ]
-  }
+  },
   "north": {
     "scenery": [
       {
@@ -57,15 +57,12 @@
         "y": 0,
         "w": 100,
         "h": 100,
-        "origin": {
-          "x": 0.5,
-          "y": 0.5
-        }
+        "r": 0
       }
     ],
     "interactables":[
       {
-        "name": "elevator up button"
+        "name": "elevator up button",
         "x": 0,
         "y": 0,
         "w": 100,
