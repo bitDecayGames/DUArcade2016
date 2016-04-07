@@ -23,6 +23,8 @@ class Level {
         this.orderedFadingRenderGroup = this.game.add.group();
 
         this.player = new Player(this.game, this.myInput);
+        this.player.body.x = 200;
+        this.player.body.y = 200;
         this.orderedFadingRenderGroup.add(this.player.sprite);
 
         this.data.load.imgs.forEach((i)=>{
@@ -47,22 +49,22 @@ class Level {
             this.sprites.push(s.sprite);
         });
 
-        for (var i = 1; i <= this.data.floorplan.outline.length; i+=1){
-            var lastPoint = this.data.floorplan.outline[i - 1];
-            var curPoint = (i === this.data.floorplan.outline.length ? this.data.floorplan.outline[0] : this.data.floorplan.outline[i]);
+        var floorbodies:Phaser.Group = this.game.add.physicsGroup(Phaser.Physics.P2JS);
+        this.data.floorplan.outline.forEach((lastPoint, index)=>{
+            var curPoint = (index + 1 === this.data.floorplan.outline.length ? this.data.floorplan.outline[0] : this.data.floorplan.outline[index + 1]);
+
             var distance = Phaser.Math.distance(lastPoint.x, lastPoint.y, curPoint.x, curPoint.y);
-            var dirNorm = curPoint.clone().subtract(lastPoint.x, lastPoint.y).normalize();
-
+            var zeroedCurPoint = curPoint.clone().subtract(lastPoint.x, lastPoint.y);
+            var midPoint = zeroedCurPoint.clone().multiply(0.5, 0.5).add(lastPoint.x, lastPoint.y);
+            var dirNorm = zeroedCurPoint.clone().normalize();
             var rotation = Phaser.Math.radToDeg(Phaser.Math.angleBetween(0, 0, dirNorm.x, dirNorm.y));
-            var midPoint = curPoint.clone().subtract(lastPoint.x, lastPoint.y).multiply(0.5, 0.5);
-            console.log("rotation:", rotation, "dirNorm:", dirNorm, "midPoint:", midPoint);
 
-            var body = new Phaser.Physics.P2.Body(this.game, null, lastPoint.x + midPoint.x, lastPoint.y + midPoint.y, 0);
-            body.setRectangle((rotation === 0 || rotation === 180 ? distance : 20), (rotation === 90 || rotation === -90 ? distance : 20), 0, 0, 0);
-            body.angle = 0;
-            body.debug = true;
-            this.game.physics.p2.addBody(body);
-        }
+            var body = floorbodies.create(midPoint.x, midPoint.y);
+            body.body.setRectangle(distance, 10, 0, 0);
+            body.body.angle = rotation;
+            body.body.debug = true;
+            body.body.static = true;
+        });
     }
 
     changeFacing(){
