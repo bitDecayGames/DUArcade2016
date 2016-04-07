@@ -1,6 +1,7 @@
 class LevelData {
     public name: string;
     public camera: CameraData;
+    public load: Load;
     public floorplan: Floorplan;
     public north: Direction;
     public east: Direction;
@@ -12,6 +13,7 @@ class LevelData {
     constructor(data){
         this.name = data.name;
         this.camera = new CameraData(data.camera);
+        this.load = new Load(data.load);
         this.floorplan = new Floorplan(data.floorplan);
         this.north = new Direction(data.north);
         this.east = new Direction(data.east);
@@ -21,8 +23,8 @@ class LevelData {
     }
 
     rotate(clockwise: boolean){
-        if (clockwise) this.facing += 1;
-        else this.facing -= 1;
+        if (clockwise) this.facing -= 1;
+        else this.facing += 1;
         if (this.facing < 0) this.facing = 3;
         else if (this.facing > 3) this.facing = 0;
     }
@@ -90,6 +92,28 @@ class CameraData {
         follow: this.follow,
         viewport: this.viewport
     }}
+}
+
+class Load {
+    imgs: ImgData[];
+
+    constructor(data){
+        this.imgs = data.imgs.map((i)=>{return new ImgData(i)});
+    }
+
+    toJson(){return {imgs: this.imgs.map((i)=>{return i.toJson()})}}
+}
+
+class ImgData {
+    name: string;
+    path: string;
+
+    constructor(data){
+        this.name = data.name;
+        this.path = data.path;
+    }
+
+    toJson(){return {name: this.name, path: this.path}}
 }
 
 class Floorplan {
