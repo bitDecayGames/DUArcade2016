@@ -5,6 +5,7 @@ class DUArcade2016Game extends Phaser.State {
         this.load.image('apple', '../img/apple.png');
         this.load.image('floor', '../img/floor.png');
         this.load.image('wall', '../img/wall.png');
+        this.load.audio('step', ['../sfx/step_tile.wav']);
     }
 
     create() {

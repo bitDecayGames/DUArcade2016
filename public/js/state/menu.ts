@@ -17,6 +17,8 @@ class Menu extends Phaser.State {
     preload(){
         this.load.spritesheet("button", "img/button_sprite_sheet.png", 193, 71);
         this.load.json('menuInfo', 'conf/menu.json');
+        this.load.audio('slap', ['../sfx/slap.wav']);
+        this.load.audio('raspberry', ['../sfx/raspberry.wav']);
     }
     create(){
         this.selectedIndex = -1;
@@ -46,10 +48,12 @@ class Menu extends Phaser.State {
         this.myInput.update();
 
         if (this.myInput.isJustDown(InputType.LEFT) || this.myInput.isJustDown(InputType.UP)){
+            this.game.sound.play('slap');
             if (this.selectedIndex <= 0) this.selectedIndex = this.buttons.length - 1;
             else this.selectedIndex -= 1;
             this.markSelected();
         } else if (this.myInput.isJustDown(InputType.RIGHT) || this.myInput.isJustDown(InputType.DOWN)){
+            this.game.sound.play('slap');
             if (this.selectedIndex >= this.buttons.length - 1 || this.selectedIndex < 0) this.selectedIndex = 0;
             else this.selectedIndex += 1;
             this.markSelected();
@@ -69,7 +73,10 @@ class Menu extends Phaser.State {
 
     select(){
         this.buttons.forEach((button, index) => {
-            if (index == this.selectedIndex) this.game.state.start(button.info.state);
+            if (index == this.selectedIndex) {
+                this.game.sound.play('raspberry');
+                this.game.state.start(button.info.state);
+            }
         });
     }
 }
