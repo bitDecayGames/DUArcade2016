@@ -1,67 +1,116 @@
+import Rectangle = Phaser.Rectangle;
 class DrawRectangle {
     private game:Phaser.Game;
     private input:Input;
-    private callback:(rects:Phaser.Rectangle[], graphics:Phaser.Graphics)=>void;
-    private rects:Phaser.Rectangle[];
-    private currentRect:Phaser.Rectangle;
-    private color: number = 0xAA0044;
-    private inverseColor: number;
-    private down:Phaser.Point;
-    private graphics:Phaser.Graphics;
+    private callback:(rects:MyDrawRectangles)=>void;
+    private rects:MyDrawRectangles;
 
-    constructor(game: Phaser.Game, input:Input, callback:(rects:Phaser.Rectangle[], graphics:Phaser.Graphics)=>void, color?:number, rects?:Phaser.Rectangle[], graphics?:Phaser.Graphics){
+    constructor(game: Phaser.Game, input:Input, callback:(rects:MyDrawRectangles)=>void, rects?:MyDrawRectangles){
         this.game = game;
         this.input = input;
         this.callback = callback;
         if (rects) this.rects = rects;
-        else this.rects = [];
-        if (color) this.color = color;
-        this.inverseColor = Phaser.Color.getColor(255 - Phaser.Color.getRed(this.color),255 - Phaser.Color.getGreen(this.color),255 - Phaser.Color.getBlue(this.color));
-        if (graphics) this.graphics = graphics;
-        else this.graphics = this.game.add.graphics(0, 0);
+        else this.rects = new MyDrawRectangles(game);
     }
 
     private mousePos():Phaser.Point{return new Phaser.Point(this.game.input.x, this.game.input.y)}
 
-    private rectangleSize(rect:Phaser.Rectangle, down:Phaser.Point, cur:Phaser.Point){
-        rect.width = Math.abs(down.x - cur.x);
-        rect.height = Math.abs(down.y - cur.y);
+    update(){
+        if (this.input.isJustDown(InputType.ACTION)) this.rects.startNewRect(this.mousePos());
+        else if (this.input.isJustUp(InputType.ACTION)) this.rects.addRect();
+        else if (this.input.isJustDown(InputType.DELETE)) this.rects.removeLastRect();
+        else if (this.input.isJustDown(InputType.LEFT)) this.rects.moveLastRect(-1, 0);
+        else if (this.input.isJustDown(InputType.RIGHT)) this.rects.moveLastRect(1, 0);
+        else if (this.input.isJustDown(InputType.UP)) this.rects.moveLastRect(0, -1);
+        else if (this.input.isJustDown(InputType.DOWN)) this.rects.moveLastRect(0, 1);
+        else if (this.input.isJustDown(InputType.ESCAPE) && this.callback) {
+            this.rects.clearCurrentRect();
+            this.callback(this.rects);
+        }
 
-        if (cur.x < down.x) rect.x = cur.x;
-        else rect.x = cur.x - rect.width;
+        this.rects.draw(this.mousePos());
+    }
+}
 
-        if (cur.y < down.y) rect.y = cur.y;
-        else rect.y = cur.y - rect.height;
+class MyDrawRectangles{
+    rects:Phaser.Rectangle[];
+    currentRect:Phaser.Rectangle;
+    graphics:Phaser.Graphics;
+    inverseGraphics:Phaser.Graphics;
+    color:number;
+    inverseColor:number;
+    private down:Phaser.Point;
+    constructor(game:Phaser.Game, color:number = 0xAA0044){
+        this.graphics = game.add.graphics(0, 0);
+        this.inverseGraphics = game.add.graphics(0, 0);
+        this.setColor(color);
+        this.rects = [];
+        this.currentRect = null;
     }
 
-    private drawRectangles(){
+    private updateCurrentRect(mousePosition:Phaser.Point){
+        this.currentRect.width = Math.abs(this.down.x - mousePosition.x);
+        this.currentRect.height = Math.abs(this.down.y - mousePosition.y);
+
+        if (mousePosition.x < this.down.x) this.currentRect.x = mousePosition.x;
+        else this.currentRect.x = mousePosition.x - this.currentRect.width;
+
+        if (mousePosition.y < this.down.y) this.currentRect.y = mousePosition.y;
+        else this.currentRect.y = mousePosition.y - this.currentRect.height;
+    }
+
+    draw(mousePosition?:Phaser.Point){
         this.graphics.clear();
         this.graphics.lineStyle(2, this.color);
         this.rects.forEach((rect)=>{
             this.graphics.drawRect(rect.x, rect.y, rect.width, rect.height);
         });
-        if(this.currentRect) {
-            this.graphics.lineStyle(2, this.inverseColor);
-            this.graphics.drawRect(this.currentRect.x, this.currentRect.y, this.currentRect.width, this.currentRect.height);
+        if(this.currentRect && mousePosition) {
+            this.updateCurrentRect(mousePosition);
+            this.inverseGraphics.clear();
+            this.inverseGraphics.lineStyle(2, this.inverseColor);
+            this.inverseGraphics.drawRect(this.currentRect.x, this.currentRect.y, this.currentRect.width, this.currentRect.height);
         }
     }
 
-    update(){
-        if (this.currentRect) this.rectangleSize(this.currentRect, this.down, this.mousePos());
+    setColor(color:number){
+        this.color = color;
+        this.inverseColor = Phaser.Color.getColor(
+            255 - Phaser.Color.getRed(this.color),
+            255 - Phaser.Color.getGreen(this.color),
+            255 - Phaser.Color.getBlue(this.color)
+        );
+    }
 
-        if (this.input.isJustDown(InputType.ACTION)) {
-            this.currentRect = new Phaser.Rectangle(0, 0, 0, 0);
-            this.down = this.mousePos();
-        } else if (this.input.isJustUp(InputType.ACTION) && this.currentRect) {
-            this.rects.push(this.currentRect);
-            this.currentRect = null;
-        } else if (this.input.isJustDown(InputType.DELETE) && this.rects.length > 0) this.rects.splice(this.rects.length - 1, 1);
-        else if (this.input.isJustDown(InputType.ESCAPE) && this.callback) {
-            this.currentRect = null;
-            this.drawRectangles();
-            this.callback(this.rects, this.graphics);
+    startNewRect(down:Phaser.Point){
+        if (!this.currentRect) {
+            this.down = down;
+            this.currentRect = new Rectangle(0, 0, 0, 0);
         }
+    }
 
-        this.drawRectangles();
+    addRect(){
+        if (this.currentRect){
+            this.rects.push(this.currentRect);
+            this.clearCurrentRect();
+        }
+    }
+
+    removeLastRect(){
+        if (this.rects.length > 0) this.rects.splice(this.rects.length - 1, 1);
+    }
+
+    clearCurrentRect(){
+        this.currentRect = null;
+        this.down = null;
+        this.inverseGraphics.clear();
+    }
+
+    moveLastRect(x:number, y:number){
+        if (this.rects.length > 0){
+            var r = this.rects[this.rects.length - 1];
+            r.x += x;
+            r.y += y;
+        }
     }
 }

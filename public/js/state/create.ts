@@ -5,15 +5,13 @@ class CreateLevel extends Phaser.State {
     private obstacleBrush: PaintBrush;
     private drawRectangle: DrawRectangle;
     private drawLines: DrawLines;
-    private spriteStamp:Stamp;
 
     private editorStateIndex:number = 0;
     private editorStateActivated:boolean = false;
 
-    private floorplan:Phaser.Point[] = [];
-    private floorplanGraphics:Phaser.Graphics;
-    private obstacleBodies:Phaser.Rectangle[] = [];
-    private obstacleBodiesGraphics:Phaser.Graphics;
+
+    private floorplanLines:MyDrawLines;
+    private obstacleBodies:MyDrawRectangles;
     private obstacles:Phaser.Sprite[] = [];
     private floor:Phaser.Sprite[] = [];
     private north:Phaser.Sprite[] = [];
@@ -23,6 +21,9 @@ class CreateLevel extends Phaser.State {
 
 
     preload(){
+        this.floorplanLines = new MyDrawLines(this.game, Phaser.Color.getColor(200, 55, 255));
+        this.obstacleBodies = new MyDrawRectangles(this.game, Phaser.Color.getColor(253, 145, 10));
+
         this.myInput = new Input(this.game);
         this.floorBrush = new PaintBrush(this.game, this.myInput, [
             "apple",
@@ -69,11 +70,10 @@ class CreateLevel extends Phaser.State {
             var state = EditorState.states[this.editorStateIndex];
             switch(state){
                 case EditorState.FLOORPLAN:
-                    this.drawLines = new DrawLines(this.game, this.myInput, (points, graphics)=>{
-                        this.floorplan = points;
-                        this.floorplanGraphics = graphics;
+                    this.drawLines = new DrawLines(this.game, this.myInput, (lines)=>{
+                        this.floorplanLines = lines;
                         this.drawLines = null;
-                    }, Phaser.Color.getColor(200, 55, 255), this.floorplan, this.floorplanGraphics);
+                    }, this.floorplanLines);
                     break;
                 case EditorState.FLOOR:
                     this.floorBrush.enter(sprites => {
@@ -81,11 +81,10 @@ class CreateLevel extends Phaser.State {
                     }, this.floor);
                     break;
                 case EditorState.OBSTACLES:
-                    this.drawRectangle = new DrawRectangle(this.game, this.myInput, (rects, graphics)=>{
+                    this.drawRectangle = new DrawRectangle(this.game, this.myInput, (rects)=>{
                         this.obstacleBodies = rects;
-                        this.obstacleBodiesGraphics = graphics;
                         this.drawRectangle = null;
-                    }, Phaser.Color.getColor(253, 145, 10), this.obstacleBodies, this.obstacleBodiesGraphics);
+                    }, this.obstacleBodies);
                     break;
                 case EditorState.SCENERY:
                     this.obstacleBrush.enter(sprites => {
@@ -93,12 +92,24 @@ class CreateLevel extends Phaser.State {
                     }, this.obstacles);
                     break;
                 case EditorState.NORTH:
+                    this.wallBrush.enter(sprites => {
+                        this.north = sprites;
+                    }, this.north);
                     break;
                 case EditorState.EAST:
+                    this.wallBrush.enter(sprites => {
+                        this.east = sprites;
+                    }, this.east);
                     break;
                 case EditorState.SOUTH:
+                    this.wallBrush.enter(sprites => {
+                        this.south = sprites;
+                    }, this.south);
                     break;
                 case EditorState.WEST:
+                    this.wallBrush.enter(sprites => {
+                        this.west = sprites;
+                    }, this.west);
                     break;
             }
         }
@@ -108,5 +119,51 @@ class CreateLevel extends Phaser.State {
         if (this.myInput.isJustDown(InputType.ESCAPE)) this.editorStateActivated = false;
 
         this.game.debug.text(EditorState.states[this.editorStateIndex] + (this.editorStateActivated ? " -active-" : ""), 0, 10, "white");
+
+        this.drawInOrder();
+    }
+
+    private drawInOrder(){
+        switch(EditorState.states[this.editorStateIndex]){
+            case EditorState.NORTH:
+                this.north.forEach(s => s.visible = true);
+                this.east.forEach(s => s.visible = false);
+                this.south.forEach(s => s.visible = false);
+                this.west.forEach(s => s.visible = false);
+                break;
+            case EditorState.EAST:
+                this.north.forEach(s => s.visible = false);
+                this.east.forEach(s => s.visible = true);
+                this.south.forEach(s => s.visible = false);
+                this.west.forEach(s => s.visible = false);
+                break;
+            case EditorState.SOUTH:
+                this.north.forEach(s => s.visible = false);
+                this.east.forEach(s => s.visible = false);
+                this.south.forEach(s => s.visible = true);
+                this.west.forEach(s => s.visible = false);
+                break;
+            case EditorState.WEST:
+                this.north.forEach(s => s.visible = false);
+                this.east.forEach(s => s.visible = false);
+                this.south.forEach(s => s.visible = false);
+                this.west.forEach(s => s.visible = true);
+                break;
+            default:
+                this.north.forEach(s => s.visible = false);
+                this.east.forEach(s => s.visible = false);
+                this.south.forEach(s => s.visible = false);
+                this.west.forEach(s => s.visible = false);
+                break;
+        }
+
+        var f = (s:Phaser.Sprite)=>{s.sendToBack()};
+        this.north.forEach(f);
+        this.east.forEach(f);
+        this.south.forEach(f);
+        this.west.forEach(f);
+        this.obstacles.forEach(f);
+        this.floor.forEach(f);
+
     }
 }

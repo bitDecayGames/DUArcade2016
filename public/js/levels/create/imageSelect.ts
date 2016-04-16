@@ -19,6 +19,7 @@ class ImageSelect {
     private stepSize:number;
     private moveStepSize:number;
     private selectRect:Phaser.Rectangle;
+    private selectRectGraphics:Phaser.Graphics;
 
     constructor(game: Phaser.Game, input: Input, spriteLocations:string[]){
         this.game = game;
@@ -33,7 +34,7 @@ class ImageSelect {
         var rectSize = this.spriteSize + this.spriteSpacing / 2;
         var halfRectSize = rectSize / 2;
         this.selectRect = new Phaser.Rectangle(halfWidth - halfRectSize, halfHeight - halfRectSize, rectSize, rectSize);
-        this.game.debug.geom(this.selectRect, "yellow", false);
+        this.selectRectGraphics = game.add.graphics(0, 0);
     }
 
     preload(){
@@ -66,12 +67,14 @@ class ImageSelect {
     }
 
     update(){
+        this.drawSelectRect();
         if (this.isMoving) this.moving();
         else {
             if (this.input.isJustDown(InputType.LEFT)) this.move(true);
             else if (this.input.isJustDown(InputType.RIGHT)) this.move(false);
             else if (this.input.isJustDown(InputType.ACTION) && this.callback) {
                 this._isVisible = false;
+                this.clearSelectRect();
                 this.sprites.forEach(sprite => {
                     sprite.visible = false;
                     sprite.bringToTop()
@@ -100,5 +103,15 @@ class ImageSelect {
             });
             this.currentMoveStep += 1;
         } else this.isMoving = false;
+    }
+
+    private drawSelectRect(){
+        this.selectRectGraphics.clear();
+        this.selectRectGraphics.lineStyle(4, 0xFFFF00);
+        this.selectRectGraphics.drawRect(this.selectRect.x, this.selectRect.y, this.selectRect.width, this.selectRect.height);
+    }
+
+    private clearSelectRect(){
+        this.selectRectGraphics.clear();
     }
 }
