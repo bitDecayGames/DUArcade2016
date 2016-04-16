@@ -12,11 +12,11 @@ class CreateLevel extends Phaser.State {
 
     private floorplanLines:MyDrawLines;
     private obstacleBodies:MyDrawRectangles;
-    private obstacles:Phaser.Sprite[] = [];
     private floor:Phaser.Sprite[] = [];
+    private obstacles:Phaser.Sprite[] = [];
     private north:Phaser.Sprite[] = [];
-    private south:Phaser.Sprite[] = [];
     private east:Phaser.Sprite[] = [];
+    private south:Phaser.Sprite[] = [];
     private west:Phaser.Sprite[] = [];
 
 
@@ -116,7 +116,11 @@ class CreateLevel extends Phaser.State {
         else if (this.myInput.isJustDown(InputType.LEFT) && this.editorStateIndex - 1 >= 0) this.editorStateIndex -= 1;
         else if (this.myInput.isJustDown(InputType.RIGHT) && this.editorStateIndex + 1 < EditorState.states.length) this.editorStateIndex += 1;
 
-        if (this.myInput.isJustDown(InputType.ESCAPE)) this.editorStateActivated = false;
+        if (this.myInput.isJustDown(InputType.ESCAPE)) {
+            if (this.editorStateActivated) this.editorStateActivated = false;
+            else this.download();
+        }
+
 
         this.game.debug.text(EditorState.states[this.editorStateIndex] + (this.editorStateActivated ? " -active-" : ""), 0, 10, "white");
 
@@ -165,5 +169,52 @@ class CreateLevel extends Phaser.State {
         this.obstacles.forEach(f);
         this.floor.forEach(f);
 
+    }
+
+    download(){
+        var serializeSprites = s=>{return {img: s.key, x: s.x, y: s.y, w: s.width, h: s.height}}
+
+        var data = {
+            name: "Test Level",
+            camera:{
+                follow: false,
+                viewport: {
+                    x: 0,
+                    y: 0,
+                    w: 200,
+                    h: 200
+                }
+            },
+            load:{
+                imgs: this.floorBrush.spriteLocations.concat(this.wallBrush.spriteLocations).concat(this.obstacleBrush.spriteLocations).filter((value:string, index:number, self:string[])=>{return self.indexOf(value) === index})
+            },
+            floorplan: {
+                outline: this.floorplanLines.points.map(p => {return {x: p.x, y: p.y}}),
+                obstacles: this.obstacleBodies.rects.map(r => {return {x: r.x, y: r.y, w: r.width, h: r.height}}),
+                floor: this.floor.map(serializeSprites),
+                scenery: this.obstacles.map(serializeSprites)
+            },
+            north: {
+                scenery: this.north.map(serializeSprites)
+            },
+            east: {
+                scenery: this.east.map(serializeSprites)
+            },
+            south: {
+                scenery: this.south.map(serializeSprites)
+            },
+            west: {
+                scenery: this.west.map(serializeSprites)
+            }
+        };
+
+        var $:any = window["$"]; // jquery
+        $.ajax({
+            method: "POST",
+            url: "/level/" + data.name,
+            success: (result) => {
+                console.log("Result: " + result);
+            }
+        });
     }
 }
