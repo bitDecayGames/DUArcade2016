@@ -28,6 +28,9 @@
           ]
         }
       },
+      "interact": [
+        "<text>" //TODO Need to figure out how to have consequences of interacting with things
+      ]
     }
   }
 }
