@@ -1,0 +1,33 @@
+{
+  "items": {
+    "<item_name>": {
+      "look": [
+        "<text>"
+      ],
+      "inspect": [
+        "<text>"
+      ],
+      "take": [
+        "<text>"
+      ],
+      "open": [
+        "<text>"
+      ],
+      "close": [
+        "<text>"
+      ],
+      "useOn": {
+        "<objectToInteractWith>": {
+          "text": "<interaction text>",
+          "replaceReceiverWith": "<objectToReplaceTheUseOnObjectWIth",
+          "reward": [
+            "<nameOfItemToGivePlayer>"
+          ],
+          "price": [
+            "<nameOfItemToTakeFromPlayer>"
+          ]
+        }
+      },
+    }
+  }
+}
