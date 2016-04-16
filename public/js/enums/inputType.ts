@@ -3,5 +3,9 @@ enum InputType {
     DOWN,
     LEFT,
     RIGHT,
-    ACTION
+    ACTION,
+    DELETE,
+    ESCAPE,
+    ENTER,
+    SPACE
 }

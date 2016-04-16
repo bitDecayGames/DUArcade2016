@@ -6,6 +6,7 @@ class Level {
     private data: LevelData;
     private sprites: Phaser.Sprite[];
     private orderedFadingRenderGroup: Phaser.Group;
+    private floorbodies: Phaser.Group;
     private isCurrentlyRotating: boolean = false;
 
     private TOTAL_FRAMES_TO_CHANGE_STATE: number = 10;
@@ -49,7 +50,7 @@ class Level {
             this.sprites.push(s.sprite);
         });
 
-        var floorbodies:Phaser.Group = this.game.add.physicsGroup(Phaser.Physics.P2JS);
+        this.floorbodies = this.game.add.physicsGroup(Phaser.Physics.P2JS);
         this.data.floorplan.outline.forEach((lastPoint, index)=>{
             var curPoint = (index + 1 === this.data.floorplan.outline.length ? this.data.floorplan.outline[0] : this.data.floorplan.outline[index + 1]);
 
@@ -59,7 +60,7 @@ class Level {
             var dirNorm = zeroedCurPoint.clone().normalize();
             var rotation = Phaser.Math.radToDeg(Phaser.Math.angleBetween(0, 0, dirNorm.x, dirNorm.y));
 
-            var body = floorbodies.create(midPoint.x, midPoint.y);
+            var body = this.floorbodies.create(midPoint.x, midPoint.y);
             body.body.setRectangle(distance, 10, 0, 0);
             body.body.angle = rotation;
             body.body.debug = true;
@@ -77,10 +78,19 @@ class Level {
             sprite.rotation += this.RADIANS_PER_STEP;
         });
 
-        var p = new Phaser.Point(this.player.sprite.body.x, this.player.sprite.body.y);
+        var p = new Phaser.Point(this.player.body.x, this.player.body.y);
         p.rotate(center.x, center.y, this.DEGREES_PER_STEP, true);
-        this.player.sprite.body.x = p.x;
-        this.player.sprite.body.y = p.y;
+        this.player.body.x = p.x;
+        this.player.body.y = p.y;
+
+        this.floorbodies.forEach((body:any)=>{
+            var p = new Phaser.Point(body.body.x, body.body.y);
+            p.rotate(center.x, center.y, this.DEGREES_PER_STEP, true);
+            console.log("Rotate body: " + Object.keys(body));
+            body.body.x = p.x;
+            body.body.y = p.y;
+            body.body.rotation += this.RADIANS_PER_STEP;
+        }, this);
 
         this.FRAMES_TO_CHANGE_STATE -= 1;
         if (this.FRAMES_TO_CHANGE_STATE <= 0){
