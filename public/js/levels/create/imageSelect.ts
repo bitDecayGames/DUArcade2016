@@ -3,6 +3,7 @@ class ImageSelect {
     private input:Input;
     private spriteLocations:string[];
     private sprites: Phaser.Sprite[] = [];
+    private spriteGroup: Phaser.Group;
     private callback: (selectedSprite:Phaser.Sprite)=>void;
     private selectedSpriteIndex = 0;
 
@@ -44,8 +45,9 @@ class ImageSelect {
     create(){
         var halfHeight = this.game.height / 2;
         var halfWidth = this.game.width / 2;
+        this.spriteGroup = this.game.add.group();
         this.spriteLocations.forEach((location:string, index:number) => {
-            var s = this.game.add.sprite((index * this.stepSize) + halfWidth, halfHeight, location);
+            var s = this.game.add.sprite((index * this.stepSize) + halfWidth, halfHeight, location, this.spriteGroup);
             s.anchor.set(0.5, 0.5);
             s.width = this.spriteSize;
             s.height = this.spriteSize;
@@ -58,7 +60,9 @@ class ImageSelect {
         this.callback = callback;
         this.sprites.forEach(sprite => {
             sprite.visible = true;
+            sprite.bringToTop()
         });
+        this._isVisible = true;
     }
 
     update(){
@@ -66,14 +70,20 @@ class ImageSelect {
         else {
             if (this.input.isJustDown(InputType.LEFT)) this.move(true);
             else if (this.input.isJustDown(InputType.RIGHT)) this.move(false);
-            else if (this.input.isJustDown(InputType.ACTION) && this.callback) this.callback(this.sprites[this.selectedSpriteIndex]);
+            else if (this.input.isJustDown(InputType.ACTION) && this.callback) {
+                this._isVisible = false;
+                this.sprites.forEach(sprite => {
+                    sprite.visible = false;
+                    sprite.bringToTop()
+                });
+                this.callback(this.sprites[this.selectedSpriteIndex]);
+            }
         }
     }
 
     isVisible():boolean { return this._isVisible }
 
     private move(isMovingLeft:boolean){
-        console.log("Move " + (isMovingLeft ? "Left" : "Right"));
         if ((isMovingLeft && this.selectedSpriteIndex + 1 < this.sprites.length) ||
             (!isMovingLeft && this.selectedSpriteIndex - 1 >= 0)) {
             this.isMoving = true;

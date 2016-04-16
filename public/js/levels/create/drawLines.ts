@@ -8,15 +8,17 @@ class DrawLines {
     private newLine:Phaser.Graphics;
     private line:Phaser.Graphics;
 
-    constructor(game: Phaser.Game, input: Input, callback:(points:Phaser.Point[], graphics:Phaser.Graphics)=>void, color?:number){
+    constructor(game: Phaser.Game, input: Input, callback:(points:Phaser.Point[], graphics:Phaser.Graphics)=>void, color?:number, points?:Phaser.Point[], graphics?:Phaser.Graphics){
         this.game = game;
         this.input = input;
         this.callback = callback;
-        this.points = [];
+        if (points) this.points = points;
+        else this.points = [];
         if (color) this.color = color;
         this.inverseColor = Phaser.Color.getColor(255 - Phaser.Color.getRed(this.color), 255 - Phaser.Color.getGreen(this.color), 255 - Phaser.Color.getBlue(this.color));
 
-        this.line = this.game.add.graphics(0, 0);
+        if (graphics) this.line = graphics;
+        else this.line = this.game.add.graphics(0, 0);
         this.newLine = this.game.add.graphics(0, 0);
     }
 

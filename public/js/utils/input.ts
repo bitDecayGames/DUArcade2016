@@ -54,5 +54,6 @@ class InputState {
         this[InputType.ESCAPE] = keyboard && keyboard.isDown(Phaser.Keyboard.ESC);
         this[InputType.ENTER] = keyboard && keyboard.isDown(Phaser.Keyboard.ENTER);
         this[InputType.SPACE] = keyboard && keyboard.isDown(Phaser.Keyboard.SPACEBAR);
+        this[InputType.CLICK] = pointer && pointer.isDown;
     }
 }

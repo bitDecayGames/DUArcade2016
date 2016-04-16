@@ -7,5 +7,6 @@ enum InputType {
     DELETE,
     ESCAPE,
     ENTER,
-    SPACE
+    SPACE,
+    CLICK
 }

@@ -12,8 +12,15 @@ class Stamp {
     }
 
     update(){
-        if (this.input.isJustDown(InputType.ACTION) && this.callback) this.callback(this.game.add.sprite(this.sprite.x, this.sprite.y, this.sprite.name));
+        if (this.input.isJustDown(InputType.ACTION) && this.callback) {
+            this.callback(this.game.add.sprite(this.sprite.x, this.sprite.y, this.sprite.key));
+            this.sprite.bringToTop();
+        }
         this.sprite.x = this.game.input.x;
         this.sprite.y = this.game.input.y;
+    }
+
+    destroy(){
+        this.sprite.kill();
     }
 }

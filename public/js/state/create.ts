@@ -1,8 +1,8 @@
 class CreateLevel extends Phaser.State {
     private myInput: Input;
-    private floorImages: ImageSelect;
-    private wallImages: ImageSelect;
-    private obstacleImages: ImageSelect;
+    private floorBrush: PaintBrush;
+    private wallBrush: PaintBrush;
+    private obstacleBrush: PaintBrush;
     private drawRectangle: DrawRectangle;
     private drawLines: DrawLines;
     private spriteStamp:Stamp;
@@ -24,44 +24,44 @@ class CreateLevel extends Phaser.State {
 
     preload(){
         this.myInput = new Input(this.game);
-        this.floorImages = new ImageSelect(this.game, this.myInput, [
+        this.floorBrush = new PaintBrush(this.game, this.myInput, [
             "apple",
             "button_sprite_sheet",
             "floor",
             "placeholder-background.jpg",
             "wall"
         ]);
-        this.floorImages.preload();
-        this.wallImages = new ImageSelect(this.game, this.myInput, [
+        this.floorBrush.preload();
+        this.wallBrush = new PaintBrush(this.game, this.myInput, [
             "apple",
             "button_sprite_sheet",
             "floor",
             "placeholder-background.jpg",
             "wall"
         ]);
-        this.wallImages.preload();
-        this.obstacleImages = new ImageSelect(this.game, this.myInput, [
+        this.wallBrush.preload();
+        this.obstacleBrush = new PaintBrush(this.game, this.myInput, [
             "apple",
             "button_sprite_sheet",
             "floor",
             "placeholder-background.jpg",
             "wall"
         ]);
-        this.obstacleImages.preload();
+        this.obstacleBrush.preload();
     }
 
     create(){
-        this.floorImages.create();
-        this.wallImages.create();
-        this.obstacleImages.create();
+        this.floorBrush.create();
+        this.wallBrush.create();
+        this.obstacleBrush.create();
     }
 
     update(){
         this.myInput.update();
 
-        if (this.floorImages.isVisible()) this.floorImages.update();
-        else if (this.wallImages.isVisible()) this.wallImages.update();
-        else if (this.obstacleImages.isVisible()) this.obstacleImages.update();
+        if (this.floorBrush.isActive()) this.floorBrush.update();
+        else if (this.wallBrush.isActive()) this.wallBrush.update();
+        else if (this.obstacleBrush.isActive()) this.obstacleBrush.update();
         else if (this.drawRectangle) this.drawRectangle.update();
         else if (this.drawLines) this.drawLines.update();
         else if (this.myInput.isJustDown(InputType.ENTER)) {
@@ -69,27 +69,28 @@ class CreateLevel extends Phaser.State {
             var state = EditorState.states[this.editorStateIndex];
             switch(state){
                 case EditorState.FLOORPLAN:
-                    if (this.floorplanGraphics) this.floorplanGraphics.clear();
                     this.drawLines = new DrawLines(this.game, this.myInput, (points, graphics)=>{
                         this.floorplan = points;
                         this.floorplanGraphics = graphics;
                         this.drawLines = null;
-                    }, Phaser.Color.getColor(200, 55, 255));
+                    }, Phaser.Color.getColor(200, 55, 255), this.floorplan, this.floorplanGraphics);
                     break;
                 case EditorState.FLOOR:
-                    this.floorImages.enter((sprites)=>{
-
-                    });
+                    this.floorBrush.enter(sprites => {
+                        this.floor = sprites;
+                    }, this.floor);
                     break;
                 case EditorState.OBSTACLES:
-                    if (this.obstacleBodiesGraphics) this.obstacleBodiesGraphics.clear();
                     this.drawRectangle = new DrawRectangle(this.game, this.myInput, (rects, graphics)=>{
                         this.obstacleBodies = rects;
                         this.obstacleBodiesGraphics = graphics;
                         this.drawRectangle = null;
-                    }, Phaser.Color.getColor(253, 145, 10));
+                    }, Phaser.Color.getColor(253, 145, 10), this.obstacleBodies, this.obstacleBodiesGraphics);
                     break;
                 case EditorState.SCENERY:
+                    this.obstacleBrush.enter(sprites => {
+                        this.obstacles = sprites;
+                    }, this.obstacles);
                     break;
                 case EditorState.NORTH:
                     break;
@@ -106,6 +107,6 @@ class CreateLevel extends Phaser.State {
 
         if (this.myInput.isJustDown(InputType.ESCAPE)) this.editorStateActivated = false;
 
-        this.game.debug.text(EditorState.states[this.editorStateIndex] + (this.editorStateActivated ? " -active-" : ""), 0, 50, "white");
+        this.game.debug.text(EditorState.states[this.editorStateIndex] + (this.editorStateActivated ? " -active-" : ""), 0, 10, "white");
     }
 }

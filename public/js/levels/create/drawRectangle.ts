@@ -9,14 +9,16 @@ class DrawRectangle {
     private down:Phaser.Point;
     private graphics:Phaser.Graphics;
 
-    constructor(game: Phaser.Game, input:Input, callback:(rects:Phaser.Rectangle[], graphics:Phaser.Graphics)=>void, color?:number){
+    constructor(game: Phaser.Game, input:Input, callback:(rects:Phaser.Rectangle[], graphics:Phaser.Graphics)=>void, color?:number, rects?:Phaser.Rectangle[], graphics?:Phaser.Graphics){
         this.game = game;
         this.input = input;
         this.callback = callback;
-        this.rects = [];
+        if (rects) this.rects = rects;
+        else this.rects = [];
         if (color) this.color = color;
         this.inverseColor = Phaser.Color.getColor(255 - Phaser.Color.getRed(this.color),255 - Phaser.Color.getGreen(this.color),255 - Phaser.Color.getBlue(this.color));
-        this.graphics = this.game.add.graphics(0, 0);
+        if (graphics) this.graphics = graphics;
+        else this.graphics = this.game.add.graphics(0, 0);
     }
 
     private mousePos():Phaser.Point{return new Phaser.Point(this.game.input.x, this.game.input.y)}
