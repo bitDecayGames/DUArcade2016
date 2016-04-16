@@ -1,7 +1,9 @@
 //<reference path="./definitions/node.d.ts"/>
 //<reference path="./definitions/express.d.ts"/>
+var bodyParser = require('body-parser');
 var express = require("express");
 var fs = require('fs');
+
 var app = express();
 var port = 3000;
 
@@ -9,7 +11,7 @@ app.use(express.static(__dirname + "/../public/"));
 
 // Post level file.
 const LEVEL_ROUTE:String = "/level/:name";
-app.post(LEVEL_ROUTE, function(req, res) {
+app.post(LEVEL_ROUTE, bodyParser.json(), function(req, res) {
     var levelName:String = req.params.name;
     console.log(LEVEL_ROUTE.replace(":name", levelName));
     var pathToFile:String = __dirname + "/../public/data/levels/" + levelName + ".json";
