@@ -30,6 +30,8 @@ const ASSET_DIR:string  = __dirname + "/../public/";
 /*
  * Gets all assets in the specified public directory.
  *
+ * Use ':' instead of '/' for dirName to go into sub directories.
+ *
  * Return format is:
  * {
  *      assets: [
@@ -41,7 +43,7 @@ const ASSET_DIR:string  = __dirname + "/../public/";
  * }
  */
 app.get(ASSET_ROUTE, bodyParser.json(), function(req, res) {
-    var dirName:string = req.params.dirName;
+    var dirName:string = req.params.dirName.replace(":", "/");
 
     console.log(ASSET_ROUTE.replace(":dirName", dirName));
 
