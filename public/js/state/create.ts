@@ -20,6 +20,8 @@ class CreateLevel extends Phaser.State {
 
     private cameraSpeed = 5;
 
+    private currentRotationalOffset = 0;
+
 
     preload(){
         this.game.world.setBounds(-1024, -1024, 2048, 2048);
@@ -133,22 +135,30 @@ class CreateLevel extends Phaser.State {
                 case EditorState.EAST:
                     this.wallBrush.enter(sprites => {
                         this.east = sprites;
-                    }, this.east, Phaser.Math.degToRad(90));
+                    }, this.east);
                     break;
                 case EditorState.SOUTH:
                     this.wallBrush.enter(sprites => {
                         this.south = sprites;
-                    }, this.south, Phaser.Math.degToRad(180));
+                    }, this.south);
                     break;
                 case EditorState.WEST:
                     this.wallBrush.enter(sprites => {
                         this.west = sprites;
-                    }, this.west, Phaser.Math.degToRad(270));
+                    }, this.west);
                     break;
             }
         }
-        else if (this.myInput.isJustDown(InputType.ARROW_LEFT) && this.editorStateIndex - 1 >= 0) this.editorStateIndex -= 1;
-        else if (this.myInput.isJustDown(InputType.ARROW_RIGHT) && this.editorStateIndex + 1 < EditorState.states.length) this.editorStateIndex += 1;
+        else if (this.myInput.isJustDown(InputType.ARROW_LEFT) && this.editorStateIndex - 1 >= 0) {
+            var state = EditorState.states[this.editorStateIndex];
+            if (state === EditorState.EAST || state === EditorState.SOUTH || state === EditorState.WEST) this.rotate(90);
+            this.editorStateIndex -= 1;
+        }
+        else if (this.myInput.isJustDown(InputType.ARROW_RIGHT) && this.editorStateIndex + 1 < EditorState.states.length) {
+            var state = EditorState.states[this.editorStateIndex];
+            if (state === EditorState.NORTH || state === EditorState.EAST || state === EditorState.SOUTH) this.rotate(-90);
+            this.editorStateIndex += 1;
+        }
 
         if (this.myInput.isDown(InputType.WASD_LEFT)) this.game.camera.x -= this.cameraSpeed;
         else if (this.myInput.isDown(InputType.WASD_RIGHT)) this.game.camera.x += this.cameraSpeed;
@@ -203,6 +213,12 @@ class CreateLevel extends Phaser.State {
         this.north.concat().reverse().concat(this.south.concat().reverse()).concat(this.west.concat().reverse()).concat(this.floor.concat().reverse()).forEach(f);
 
     }
+
+    private rotate(degrees:number){
+
+    }
+
+    private reset
 
     download(){
         var serializeSprites = s=>{return {img: s.key, x: s.x, y: s.y, w: s.width, h: s.height, r: 0}};
