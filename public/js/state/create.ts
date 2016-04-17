@@ -26,25 +26,25 @@ class CreateLevel extends Phaser.State {
 
         this.myInput = new Input(this.game);
         this.floorBrush = new PaintBrush(this.game, this.myInput, [
-            "apple",
-            "button_sprite_sheet",
-            "floor",
-            "placeholder-background",
-            "wall"
+            "floorTile"
         ]);
-        this.wallBrush = new PaintBrush(this.game, this.myInput, [
-            "apple",
-            "button_sprite_sheet",
-            "floor",
-            "placeholder-background",
-            "wall"
-        ]);
+
+        // Get all walls out of the image json.
+        // Some are not in the wall dir, list them manually for now.
+        var wallAssets = [
+            "fireplace",
+            "wallBase"
+        ];
+        var images = this.cache.getJSON("images").images;
+        images.forEach((image) => {
+            if (image.path.includes("walls/")) {
+                wallAssets.push(image.name);
+            }
+        });
+
+        this.wallBrush = new PaintBrush(this.game, this.myInput, wallAssets);
         this.obstacleBrush = new PaintBrush(this.game, this.myInput, [
-            "apple",
-            "button_sprite_sheet",
-            "floor",
-            "placeholder-background",
-            "wall"
+            "table"
         ]);
     }
 
