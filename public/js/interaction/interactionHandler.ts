@@ -91,29 +91,37 @@ class MasterCommand {
    }
 
    reward(rewards: string[]) {
-        rewards.forEach(itemName => {
-            console.log("Processing reward: " + itemName);
-            var itemFromList = this.findItem(itemName);
-            console.log("Item from list: " + itemFromList.itemName);
-            itemFromList.itemState = ItemState.INVENTORY;
-            this.saveToLocalStorage(itemFromList);
-        });
+        console.log("Processing rewards");
+        this.changeItemStates(rewards, ItemState.INVENTORY;
    }
 
    price(prices: string[]) {
-        // TODO implement
+        console.log("Processing prices");
+        this.changeItemStates(rewards, ItemState.INACTIVE;
    }
 
    deactivateItems(itemsByName: string[]) {
-        // TODO implement
+        console.log("Processing deactivations");
+        this.changeItemStates(rewards, ItemState.INACTIVE;
    }
 
    activateItems(itemsByName: string[]) {
-        // TODO implement
+        console.log("Processing activations");
+        this.changeItemStates(rewards, ItemState.MAP_ACTIVE;
    }
 
    saveToLocalStorage(item: IndividualHouseItem) {
         localStorage.setItem(item.itemName, JSON.stringify(item));
+   }
+
+   changeItemState(itemsByName: string[], state: ItemState) {
+        itemsByName.forEach(itemName => {
+            console.log("Processing item: " + itemName);
+            var itemFromList = this.findItem(itemName);
+            console.log("Item from list: " + itemFromList.itemName);
+            itemFromList.itemState = state;
+            this.saveToLocalStorage(itemFromList);
+        });
    }
 
    findItem(itemName: string): IndividualHouseItem {
