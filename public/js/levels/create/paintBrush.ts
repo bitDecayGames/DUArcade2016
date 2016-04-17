@@ -8,14 +8,13 @@ class PaintBrush {
 
     private _isActive = false;
 
+    spriteLocations:string[] = [];
+
     constructor(game: Phaser.Game, input: Input, spriteLocations:string[]){
         this.game = game;
         this.input = input;
+        this.spriteLocations = spriteLocations;
         this.spritePicker = new ImageSelect(game, input, spriteLocations);
-    }
-
-    preload(){
-        this.spritePicker.preload();
     }
 
     create(){
