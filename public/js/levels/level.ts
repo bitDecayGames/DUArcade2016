@@ -1,7 +1,7 @@
 class Level {
     private game: Phaser.Game;
     private myInput: Input;
-    private player: Player;
+    public player: Player;
 
     private data: LevelData;
     private sprites: Phaser.Sprite[];
