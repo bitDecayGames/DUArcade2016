@@ -29,7 +29,7 @@ const IMAGE_DIR:string  = __dirname + "/../public/img";
 /*
  * Gets all images in the img directory.
  *
- * Format is:
+ * Return format is:
  * {
  *      images: [
  *          {

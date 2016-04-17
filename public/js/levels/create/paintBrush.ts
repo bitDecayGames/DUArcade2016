@@ -17,10 +17,6 @@ class PaintBrush {
         this.spritePicker = new ImageSelect(game, input, spriteLocations);
     }
 
-    preload(){
-        this.spritePicker.preload();
-    }
-
     create(){
         this.spritePicker.create();
     }

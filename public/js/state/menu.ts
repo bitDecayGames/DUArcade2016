@@ -15,8 +15,12 @@ class Menu extends Phaser.State {
     myInput: Input;
 
     preload(){
-        this.load.spritesheet("button", "img/button_sprite_sheet.png", 193, 71);
         this.load.json('menuInfo', 'conf/menu.json');
+
+        var images = this.cache.getJSON('images').images;
+        images.forEach((image) => {
+            this.load.image(image.name, image.path);
+        });
     }
     create(){
         this.selectedIndex = -1;
