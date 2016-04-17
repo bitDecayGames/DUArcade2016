@@ -22,9 +22,44 @@ html, body {
 ;
 }
 
+.vertCenter {
+  vertical-align: middle;
+}
+
+.titleText {
+  .vertCenter;
+  font-size: 300%;
+}
+
 .background {
-  background-image: url("@{img}placeholder-background.jpg");
+  background-color: black;
   background-size: 100%;
+}
+
+.logoBase {
+  .vertCenter;
+  padding-right: 1%;
+}
+
+.logo {
+  .logoBase;
+  filter: gray; /* IE6-9 */
+  filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+  -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+}
+
+/* Disable grayscale on hover */
+.logo:hover {
+  .logoBase;
+  filter: none;
+  -webkit-filter: grayscale(0);
+}
+
+.icon {
+  .vertCenter;
+  width: 3%;
+  height: 3%;
+  padding-left: 1%;
 }
 
 #title {
