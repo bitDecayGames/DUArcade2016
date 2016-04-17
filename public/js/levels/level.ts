@@ -27,6 +27,7 @@ class Level {
         this.player.body.x = 200;
         this.player.body.y = 200;
         this.orderedFadingRenderGroup.add(this.player.sprite);
+        this.game.camera.follow(this.player.sprite);
 
         this.data.load.imgs.forEach((i)=>{
             this.game.load.image(i.name, i.path);

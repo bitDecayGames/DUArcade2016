@@ -31,7 +31,8 @@
   },
   "private": true,
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "body-parser": "1.15.0"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

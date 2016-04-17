@@ -1,5 +1,6 @@
 **.idea
 **.iml
+**.map
 **.project
 **.classpath
 **.settings
@@ -7,6 +8,8 @@
 **node_modules
 
 **build
+public/js/**/*.js
+server/*.js
 
 **.DS_Store
 
