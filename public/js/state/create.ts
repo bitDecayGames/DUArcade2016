@@ -29,26 +29,23 @@ class CreateLevel extends Phaser.State {
             "apple",
             "button_sprite_sheet",
             "floor",
-            "placeholder-background.jpg",
+            "placeholder-background",
             "wall"
         ]);
-        this.floorBrush.preload();
         this.wallBrush = new PaintBrush(this.game, this.myInput, [
             "apple",
             "button_sprite_sheet",
             "floor",
-            "placeholder-background.jpg",
+            "placeholder-background",
             "wall"
         ]);
-        this.wallBrush.preload();
         this.obstacleBrush = new PaintBrush(this.game, this.myInput, [
             "apple",
             "button_sprite_sheet",
             "floor",
-            "placeholder-background.jpg",
+            "placeholder-background",
             "wall"
         ]);
-        this.obstacleBrush.preload();
     }
 
     create(){
@@ -120,7 +117,6 @@ class CreateLevel extends Phaser.State {
             if (this.editorStateActivated) this.editorStateActivated = false;
             else this.download();
         }
-
 
         this.game.debug.text(EditorState.states[this.editorStateIndex] + (this.editorStateActivated ? " -active-" : ""), 0, 10, "white");
 

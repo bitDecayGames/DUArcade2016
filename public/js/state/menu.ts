@@ -15,10 +15,14 @@ class Menu extends Phaser.State {
     myInput: Input;
 
     preload(){
-        this.load.spritesheet("button", "img/button_sprite_sheet.png", 193, 71);
         this.load.json('menuInfo', 'conf/menu.json');
         this.load.audio('slap', ['../sfx/slap.wav']);
         this.load.audio('raspberry', ['../sfx/raspberry.wav']);
+
+        var images = this.cache.getJSON('images').images;
+        images.forEach((image) => {
+            this.load.image(image.name, image.path);
+        });
     }
     create(){
         this.selectedIndex = -1;

@@ -37,12 +37,6 @@ class ImageSelect {
         this.selectRectGraphics = game.add.graphics(0, 0);
     }
 
-    preload(){
-        this.spriteLocations.forEach((location:string) => {
-            this.game.load.image(location, "/img/" + (location.indexOf(".") < 0 ? location + ".png" : location));
-        });
-    }
-
     create(){
         var halfHeight = this.game.height / 2;
         var halfWidth = this.game.width / 2;
