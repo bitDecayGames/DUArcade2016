@@ -212,8 +212,12 @@ class CreateLevel extends Phaser.State {
         $.ajax({
             method: "POST",
             url: "/level/" + data.name,
+            data: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            },
             success: (result) => {
-                console.log("Result: " + result);
+                window.open(result, "_blank");
             }
         });
     }
