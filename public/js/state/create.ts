@@ -200,10 +200,33 @@ class CreateLevel extends Phaser.State {
     }
 
     private rotate(degrees:number){
+        this.currentRotationalOffset += degrees;
+        var rotationPoint = new Phaser.Point(
+            this.game.camera.x,
+            this.game.camera.y
+        );
 
+        this.floorplanLines.rotate(degrees, rotationPoint);
+        this.obstacleBodies.rotate(degrees, rotationPoint);
+        this.rotateListOfSprites(this.floor, degrees, rotationPoint);
+        this.rotateListOfSprites(this.north, degrees, rotationPoint);
+        this.rotateListOfSprites(this.east, degrees, rotationPoint);
+        this.rotateListOfSprites(this.south, degrees, rotationPoint);
+        this.rotateListOfSprites(this.west, degrees, rotationPoint);
     }
 
-    private reset
+    private rotateListOfSprites(sprites:Phaser.Sprite[], degrees:number, rotationPoint:Phaser.Point){
+        var rads = Phaser.Math.degToRad(degrees);
+        sprites.forEach((sprite)=>{
+            var p = new Phaser.Point(sprite.x, sprite.y);
+            p.rotate(rotationPoint.x, rotationPoint.y, degrees, true);
+            sprite.x = p.x;
+            sprite.y = p.y;
+            sprite.rotation += rads;
+        });
+    }
+
+    private resetRotation() {this.rotate(-this.currentRotationalOffset)}
 
     download() {
         this.save().then(function onSucess(url:string) {
@@ -212,6 +235,7 @@ class CreateLevel extends Phaser.State {
     }
 
     save():Promise<string> {
+        this.resetRotation();
         var serializeSprites = s=>{return {img: s.key, x: s.x, y: s.y, w: s.width, h: s.height, r: 0}};
 
         var data = {

@@ -96,4 +96,10 @@ class MyDrawLines{
             p.y += y;
         }
     }
+
+    rotate(degrees:number, rotationPoint:Phaser.Point){
+        this.points.forEach(point =>{
+            point.rotate(rotationPoint.x, rotationPoint.y, degrees, true);
+        });
+    }
 }
