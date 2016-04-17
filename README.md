@@ -1,5 +1,9 @@
 # DU Arcade 2016
 
+## Note
+
+The node game server cannot be developed/hosted on a Windows machine as image assets will not be loaded into Phaser correctly. Use OSX (maybe Linux) instead.
+
 ## Initial Setup
 
 Run ```npm install``` to have npm install all of the dependencies for this project.  (You will probably need to install grunt-cli globally)
