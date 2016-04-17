@@ -16,6 +16,8 @@ class Menu extends Phaser.State {
 
     preload(){
         this.load.json('menuInfo', 'conf/menu.json');
+        this.load.audio('slap', ['../sfx/slap.wav']);
+        this.load.audio('raspberry', ['../sfx/raspberry.wav']);
 
         var images = this.cache.getJSON('images').images;
         images.forEach((image) => {
@@ -50,10 +52,12 @@ class Menu extends Phaser.State {
         this.myInput.update();
 
         if (this.myInput.isJustDown(InputType.LEFT) || this.myInput.isJustDown(InputType.UP)){
+            SoundUtil.playSound(this.game, 'slap');
             if (this.selectedIndex <= 0) this.selectedIndex = this.buttons.length - 1;
             else this.selectedIndex -= 1;
             this.markSelected();
         } else if (this.myInput.isJustDown(InputType.RIGHT) || this.myInput.isJustDown(InputType.DOWN)){
+            SoundUtil.playSound(this.game, 'slap');
             if (this.selectedIndex >= this.buttons.length - 1 || this.selectedIndex < 0) this.selectedIndex = 0;
             else this.selectedIndex += 1;
             this.markSelected();
@@ -73,7 +77,10 @@ class Menu extends Phaser.State {
 
     select(){
         this.buttons.forEach((button, index) => {
-            if (index == this.selectedIndex) this.game.state.start(button.info.state);
+            if (index == this.selectedIndex) {
+                SoundUtil.playSound(this.game, 'raspberry');
+                this.game.state.start(button.info.state);
+            }
         });
     }
 }
