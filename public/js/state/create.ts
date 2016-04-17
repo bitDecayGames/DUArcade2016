@@ -28,7 +28,7 @@ class CreateLevel extends Phaser.State {
         this.obstacleBodies = new MyDrawRectangles(this.game, Phaser.Color.getColor(253, 145, 10));
 
         this.myInput = new Input(this.game);
-        this.floorBrush = new PaintBrush(this.game, this.myInput, [
+        this.floorBrush = new PaintBrush(this.game, this.myInput, [[
             "large",
             "small",
             "rug_10",
@@ -40,53 +40,27 @@ class CreateLevel extends Phaser.State {
             "rug_6",
             "rug_9",
             "rug_center"
-        ]);
+        ]]);
 
         // Get all walls out of the image json.
         // Some are not in the wall dir, list them manually for now.
-        var wallAssets = [
-            "4",
-            "6",
-            "8",
-            "45_4",
-            "45_8",
-            "3060_4",
-            "3060_8",
-            "6030_4",
-            "6030_8",
-            "doorFrame_l",
-            "doorFrame_l_edge",
-            "doorFrame_r",
-            "doorFrame_r_edge",
-            "doorFrame_top",
-            "fireplace",
-            // walls are above this line, ceilings are below this line
-            "3",
-            "9",
-            "12",
-            "bl",
-            "br",
-            "tl",
-            "tr",
-            "10",
-            "2",
-            "45_10",
-            "45_2",
-            "3060_10",
-            "3060_2",
-            "6030_10",
-            "6030_2"
-        ];
+        var wallAssets = [];
+
+        var itemAssets = [];
+
         var images = this.cache.getJSON("images").images;
         images.forEach((image) => {
             if (image.path.includes("walls/")) {
                 wallAssets.push(image.name);
             }
+            if (image.path.includes("objects/")) {
+                itemAssets.push(image.name);
+            }
         });
 
-        this.wallBrush = new PaintBrush(this.game, this.myInput, wallAssets);
+        this.wallBrush = new PaintBrush(this.game, this.myInput, [wallAssets, itemAssets]);
         this.obstacleBrush = new PaintBrush(this.game, this.myInput, [
-            "table"
+            ["table"]
         ]);
     }
 
@@ -219,7 +193,7 @@ class CreateLevel extends Phaser.State {
                 }
             },
             load:{
-                imgs: this.floorBrush.spriteLocations.concat(this.wallBrush.spriteLocations).concat(this.obstacleBrush.spriteLocations).filter((value:string, index:number, self:string[])=>{return self.indexOf(value) === index})
+                imgs: this.floorBrush.spriteLocations.concat(this.wallBrush.spriteLocations).concat(this.obstacleBrush.spriteLocations).flatMap(s => {return s}).filter((value:string, index:number, self:string[])=>{return self.indexOf(value) === index})
             },
             floorplan: {
                 outline: this.floorplanLines.points.map(p => {return {x: p.x, y: p.y}}),
