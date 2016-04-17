@@ -2,10 +2,12 @@ class MasterCommand {
     static FALLBACK_MSG = "I seem to be wasting my time."
 
     private game: Phaser.Game;
+    private player: Player;
     private items;
 
-   constructor(game: Phaser.Game) {
+   constructor(game: Phaser.Game, player: Player) {
         this.game = game;
+        this.player = player;
         this.items = game.cache.getJSON('items');
    }
 
@@ -26,7 +28,8 @@ class MasterCommand {
    }
 
    look(item: IndividualHouseItem):string {
-       return this.processVisualAction("look", item);
+      var text = this.processVisualAction("look", item);
+      return text;
    }
 
    inspect(item: IndividualHouseItem):string {
