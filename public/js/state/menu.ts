@@ -19,7 +19,7 @@ class Menu extends Phaser.State {
         this.load.audio('slap', ['../sfx/slap.wav']);
         this.load.audio('raspberry', ['../sfx/raspberry.wav']);
 
-        var images = this.cache.getJSON("images").images;
+        var images = AssetsUtil.getAssetUrls(this.game.cache, Asset.IMAGES);
         images.forEach((image) => {
             this.load.image(image.name, image.path);
         });
