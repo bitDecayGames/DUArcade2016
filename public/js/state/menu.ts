@@ -25,6 +25,8 @@ class Menu extends Phaser.State {
         });
     }
     create(){
+        this.game.world.setBounds(0, 0, 800, 600);
+
         this.selectedIndex = -1;
         this.menuStartY = this.game.height + this.menuPadding;
         this.buttons = [];

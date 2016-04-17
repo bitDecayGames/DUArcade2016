@@ -24,8 +24,8 @@ class Level {
         this.orderedFadingRenderGroup = this.game.add.group();
 
         this.player = new Player(this.game, this.myInput);
-        this.player.body.x = 300;
-        this.player.body.y = 300;
+        this.player.body.x = 200;
+        this.player.body.y = 175;
         this.orderedFadingRenderGroup.add(this.player.sprite);
         this.game.camera.follow(this.player.sprite);
 
