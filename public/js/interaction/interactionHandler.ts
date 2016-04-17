@@ -79,6 +79,7 @@ class MasterCommand {
         console.log(itemData);
 
         if (action in itemData) {
+            console.log("Doing " + action + " on " + item.itemName);
             var actionData = itemData[action]
             this.reward(actionData["reward"]);
             this.price(actionData["price"]);
@@ -90,7 +91,13 @@ class MasterCommand {
    }
 
    reward(rewards: string[]) {
-        // TODO implement
+        rewards.forEach(itemName => {
+            console.log("Processing reward: " + itemName);
+            var itemFromList = this.findItem(itemName);
+            console.log("Item from list: " + itemFromList.itemName);
+            itemFromList.itemState = ItemState.INVENTORY;
+            this.saveToLocalStorage(itemFromList);
+        });
    }
 
    price(prices: string[]) {
@@ -107,5 +114,13 @@ class MasterCommand {
 
    saveToLocalStorage(item: IndividualHouseItem) {
         localStorage.setItem(item.itemName, JSON.stringify(item));
+   }
+
+   findItem(itemName: string): IndividualHouseItem {
+        console.log("Looking for: " + itemName)
+        return HouseItems.ITEM_LIST.find(item => {
+            console.log("Comparing with " + item.itemName);
+            return item.itemName === itemName;
+        });
    }
 }

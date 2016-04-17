@@ -8,6 +8,8 @@ class PaintBrush {
 
     private _isActive = false;
 
+    private currentRotationRadians:number = 0;
+
     snap:number = 10;
 
     spriteLocations:string[] = [];
@@ -23,10 +25,11 @@ class PaintBrush {
         this.spritePicker.create();
     }
 
-    enter(callback:(sprites:Phaser.Sprite[])=>void, sprites?:Phaser.Sprite[]){
+    enter(callback:(sprites:Phaser.Sprite[])=>void, sprites?:Phaser.Sprite[], rotationRadians?:number){
         this._isActive = true;
         this.callback = callback;
         if (sprites) this.sprites = sprites;
+        if (rotationRadians != null) this.currentRotationRadians = rotationRadians;
     }
 
     isActive(){return this._isActive}
@@ -47,7 +50,7 @@ class PaintBrush {
                     }
                     this.currentSpriteStamp = new Stamp(this.game, this.input, this.game.add.sprite(0, 0, pickedSprite.key), stampedSprite => {
                         this.sprites.push(stampedSprite);
-                    });
+                    }, this.currentRotationRadians);
                 });
             }
             else if (this.input.isJustDown(InputType.DELETE) && this.sprites.length > 0) {

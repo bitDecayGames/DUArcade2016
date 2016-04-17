@@ -24,17 +24,13 @@ class Level {
         this.orderedFadingRenderGroup = this.game.add.group();
 
         this.player = new Player(this.game, this.myInput);
-        this.player.body.x = 200;
-        this.player.body.y = 200;
+        this.player.body.x = 300;
+        this.player.body.y = 300;
         this.orderedFadingRenderGroup.add(this.player.sprite);
         this.game.camera.follow(this.player.sprite);
 
-        this.data.load.imgs.forEach((i)=>{
-            this.game.load.image(i.name, i.path);
-        });
-
         this.sprites = [];
-        this.data.floorplan.scenery.forEach((s)=>{
+        this.data.floorplan.floor.forEach((s)=>{
             s.sprite = this.game.add.sprite(s.x, s.y, s.img);
             s.sprite.width = s.width;
             s.sprite.height = s.height;

@@ -6,16 +6,19 @@ class Stamp {
 
     snap:number = 10;
 
-    constructor(game: Phaser.Game, input: Input, sprite:Phaser.Sprite, callback:(sprite:Phaser.Sprite)=>void){
+    constructor(game: Phaser.Game, input: Input, sprite:Phaser.Sprite, callback:(sprite:Phaser.Sprite)=>void, rotationRadians?:number){
         this.game = game;
         this.input = input;
         this.sprite = sprite;
         this.callback = callback;
+        if (rotationRadians != null) this.sprite.rotation = rotationRadians;
     }
 
     update(){
         if (this.input.isJustDown(InputType.ACTION) && this.callback) {
-            this.callback(this.game.add.sprite(this.sprite.x, this.sprite.y, this.sprite.key));
+            var s = this.game.add.sprite(this.sprite.x, this.sprite.y, this.sprite.key);
+            s.rotation = this.sprite.rotation;
+            this.callback(s);
             this.sprite.bringToTop();
         }
         if (this.input.isDown(InputType.SHIFT)){

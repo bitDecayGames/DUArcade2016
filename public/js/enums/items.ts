@@ -22,7 +22,7 @@ class HouseItems {
     static DUSTY_GLASS = new IndividualHouseItem("Dusty Glass");
     static TAPE = new IndividualHouseItem("Tape");
 
-    static ITEM_LIST = [
+    static ITEM_LIST:IndividualHouseItem[] = [
         HouseItems.DUST,
         HouseItems.DUST_PILE,
         HouseItems.ENVELOPE,

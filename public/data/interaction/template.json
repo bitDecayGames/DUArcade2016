@@ -7,19 +7,45 @@
       "inspect": [
         "<text>"
       ],
-      "take": [
-        "<text>"
-      ],
-      "open": [
-        "<text>"
-      ],
-      "close": [
-        "<text>"
-      ],
+      "take": {
+        "text" : "<text>",
+        "reward" : "nameOfItemToGivePlayer",
+        "deactivateItems": [
+          "<nameOfItemToDeactivate>"
+        ],
+        "activateItems": [
+          "<nameOfItemToActivate>"
+        ]
+      },
+      "open": {
+        "text": "<text>",
+        "reward": "nameOfItemToGivePlayer",
+        "deactivateItems": [
+          "<nameOfItemToDeactivate>"
+        ],
+        "activateItems": [
+          "<nameOfItemToActivate>"
+        ]
+      },
+      "close": {
+        "text": "<text>",
+        "reward": "nameOfItemToGivePlayer",
+        "deactivateItems": [
+          "<nameOfItemToDeactivate>"
+        ],
+        "activateItems": [
+          "<nameOfItemToActivate>"
+        ]
+      },
       "useOn": {
         "<objectToInteractWith>": {
           "text": "<interaction text>",
-          "replaceReceiverWith": "<objectToReplaceTheUseOnObjectWIth",
+          "deactivateItems": [
+            "<nameOfItemToDeactivate>"
+          ],
+          "activateItems": [
+            "<nameOfItemToActivate>"
+          ],
           "reward": [
             "<nameOfItemToGivePlayer>"
           ],
@@ -28,9 +54,18 @@
           ]
         }
       },
-      "interact": [
-        "<text>" //TODO Need to figure out how to have consequences of interacting with things
-      ]
+      "interact": {
+        "text": "<text>",
+        "reward": [
+          "<nameOfItemToGivePlayer>"
+        ],
+        "deactivateItems": [
+          "<nameOfItemToDeactivate>"
+        ],
+        "activateItems": [
+          "<nameOfItemToActivate>"
+        ]
+      }
     }
   }
 }

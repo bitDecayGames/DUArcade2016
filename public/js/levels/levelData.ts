@@ -15,10 +15,10 @@ class LevelData {
         this.camera = new CameraData(data.camera);
         this.load = new Load(data.load);
         this.floorplan = new Floorplan(data.floorplan);
-        this.north = new Direction(data.north);
-        this.east = new Direction(data.east);
-        this.south = new Direction(data.south);
-        this.west = new Direction(data.west);
+        this.north = new Direction(data.north, 0);
+        this.east = new Direction(data.east, 90);
+        this.south = new Direction(data.south, 180);
+        this.west = new Direction(data.west, 270);
         this.directions = [ this.north, this.east, this.south, this.west ];
     }
 
@@ -49,7 +49,7 @@ class LevelData {
         return other;
     }
 
-    getScenery(): Scenery[] {
+    getScenery(): LevelImage[] {
         var all = [];
         this.directions.forEach((dir)=>{
             dir.scenery.forEach((s)=>{
@@ -95,62 +95,43 @@ class CameraData {
 }
 
 class Load {
-    imgs: ImgData[];
-
+    imgs: string[];
     constructor(data){
-        this.imgs = data.imgs.map((i)=>{return new ImgData(i)});
+        this.imgs = data.imgs;
     }
 
-    toJson(){return {imgs: this.imgs.map((i)=>{return i.toJson()})}}
-}
-
-class ImgData {
-    name: string;
-    path: string;
-
-    constructor(data){
-        this.name = data.name;
-        this.path = data.path;
-    }
-
-    toJson(){return {name: this.name, path: this.path}}
+    toJson(){return {imgs: this.imgs}}
 }
 
 class Floorplan {
     outline: Phaser.Point[];
-    obstacles: Array<Array<Phaser.Point>>;
-    scenery: Scenery[];
-    interactables: Interactable[];
+    obstacles: Phaser.Rectangle[];
+    floor: LevelImage[];
     constructor(data){
-        this.outline = data.outline.map((p)=>{return new Phaser.Point(p.x, p.y)});
-        this.obstacles = data.obstacles.map((poly)=>{return poly.map((p)=>{return new Phaser.Point(p.x, p.y)})});
-        this.scenery = data.scenery.map((s) => { return new Scenery(s) });
-        this.interactables = data.interactables.map((i) => { return new Interactable(i) });
+        this.outline = data.outline.map(p=>{return new Phaser.Point(p.x, p.y)});
+        this.obstacles = data.obstacles.map(r=>{return new Phaser.Rectangle(r.x, r.y, r.w, r.h)});
+        this.floor = data.floor.map(i => { return new LevelImage(i) });
     }
 
     toJson(){return {
-        outline: this.outline.map((p)=>{return {x: p.x, y: p.y}}),
-        obstacles: this.obstacles.map((poly)=>{return poly.map((p)=>{return {x: p.x, y: p.y}})}),
-        scenery: this.scenery.map((s)=>{return s.toJson()}),
-        interactables: this.interactables.map((i)=>{return i.toJson()}),
+        outline: this.outline.map(p=>{return {x: p.x, y: p.y}}),
+        obstacles: this.obstacles.map(r=>{return {x: r.x, y: r.y, w: r.width, h: r.height}}),
+        floor: this.floor.map(i=>{return i.toJson()}),
     }}
 }
 
 class Direction {
-    scenery: Scenery[];
-    interactables: Interactable[];
-    constructor(data){
-        this.scenery = data.scenery.map((s) => { return new Scenery(s) });
-        this.interactables = data.interactables.map((i) => { return new Interactable(i) });
+    scenery: LevelImage[];
+    constructor(data, rotationDeg){
+        this.scenery = data.scenery.map(i => { return new LevelImage(i, rotationDeg) });
     }
 
     toJson(){return {
-        scenery: this.scenery.map((s)=>{return s.toJson()}),
-        interactables: this.interactables.map((i)=>{return i.toJson()})
+        scenery: this.scenery.map(i=>{return i.toJson()})
     }}
 }
 
-class Scenery {
+class LevelImage {
     sprite: Phaser.Sprite;
     img: string;
     x: number;
@@ -158,13 +139,13 @@ class Scenery {
     width: number;
     height: number;
     rotation: number;
-    constructor(data){
+    constructor(data, rotationDeg?:number){
         this.img = data.img;
         this.x = data.x;
         this.y = data.y;
         this.width = data.w;
         this.height = data.h;
-        this.rotation = data.r;
+        this.rotation = data.r + (rotationDeg ? rotationDeg : 0);
     }
 
     toJson(){return {
@@ -174,28 +155,5 @@ class Scenery {
         w: this.width,
         h: this.height,
         r: this.rotation
-    }}
-}
-
-class Interactable {
-    name: string;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    constructor(data){
-        this.name = data.name;
-        this.x = data.x;
-        this.y = data.y;
-        this.width = data.w;
-        this.height = data.h;
-    }
-
-    toJson(){return {
-        name: this.name,
-        x: this.x,
-        y: this.y,
-        w: this.width,
-        h: this.height
     }}
 }

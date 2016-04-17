@@ -11,18 +11,18 @@
         "Dust, it rhymes with Must.",
         "I seem to be wasting my time"
       ],
-      "take": [
-        "I’m going to need to gather up this dust before I can do that."
-      ],
-      "open": [
-        "Open dust… That would be a trick."
-      ],
-      "close": [
-        "Riiiiiight…"
-      ],
-      "interact": [
-        "I’d probably better take it first."
-      ]
+      "take": {
+        "text": "I’m going to need to gather up this dust before I can do that."
+      },
+      "open": {
+        "text": "Open dust… That would be a trick."
+      },
+      "close": {
+        "text": "Riiiiiight…"
+      },
+      "interact": {
+        "text": "I’d probably better take it first."
+      }
     },
     "Dust Pile": {
       "look": [
@@ -31,18 +31,18 @@
       "inspect": [
         "It is ready to be swept away."
       ],
-      "take": [
-        "I can't just put this in my pocket. I need something to hold it in."
-      ],
-      "open": [
-        "Open dust… That would be a trick."
-      ],
-      "close": [
-        "Riiiiiight…"
-      ],
-      "interact": [
-        "I’d probably better take it first."
-      ]
+      "take": {
+        "text": "I can't just put this in my pocket. I need something to hold it in."
+      },
+      "open": {
+        "text": "Open dust… That would be a trick."
+      },
+      "close": {
+        "text": "Riiiiiight…"
+      },
+      "interact": {
+        "text": "I’d probably better take it first."
+      }
     },
     "Envelope": {
       "look": [
@@ -55,15 +55,18 @@
         "Its also got a design printed on the inside to keep unscrupulous ilk from being able to read the contents of such an envelope without opening it.",
         "Its an envelope alright!? Just take it already!"
       ],
-      "take": [
-        "I’ve taken the envelope."
-      ],
-      "open": [
-        "There’s nothing in the envelope."
-      ],
-      "close": [
-        "Open or closed, without anything inside it really makes no difference."
-      ],
+      "take": {
+        "text": "I’ve taken the envelope.",
+        "reward" : [
+          "Envelope"
+        ]
+      },
+      "open": {
+        "text": "There’s nothing in the envelope."
+      },
+      "close": {
+        "text": "Open or closed, without anything inside it really makes no difference."
+      },
       "useOn": {
         "Dust Pile": {
           "text": "Barely any of this dust fits in the envelope, but at least I'm cleaning some of it up.",
@@ -78,20 +81,17 @@
     },
     "Dust Filled Envelope": {
       "look": [
-        "<text>"
+        "It's full of dirt."
       ],
       "inspect": [
-        "<text>"
+        "It's full of dirt."
       ],
-      "take": [
-        "<text>"
-      ],
-      "open": [
-        "<text>"
-      ],
-      "close": [
-        "<text>"
-      ],
+      "take": {
+        "text": "<text>"
+      },
+      "open": {
+        "text": "I probably shouldn't just open this. I'd end up making a mess."
+      },
       "useOn": {
         "Tumbler Glass": {
           "text": "I'll just sprinkle some of this here. Looks like this guy has some greasy mitts, the dust clings to where his hand touched the glass surprisingly well.",
@@ -113,15 +113,15 @@
         "It looks like this duster gets used frequently.",
         "Note to self. It’s a feather duster. No more, no less."
       ],
-      "take": [
-        "I’ve always wanted a proper feather duster."
-      ],
-      "open": [
-        "After looking extremely closely at the feather duster, I dont find any secret compartments, or anything else that would seem to open. After thinking about it a moment, I feel like a jackass for having tried to open a feather duster."
-      ],
-      "close": [
-        "I seem to be wasting my time."
-      ],
+      "take": {
+        "text": "I’ve always wanted a proper feather duster."
+      },
+      "open": {
+        "text": "After looking extremely closely at the feather duster, I dont find any secret compartments, or anything else that would seem to open. After thinking about it a moment, I feel like a jackass for having tried to open a feather duster."
+      },
+      "close": {
+        "text": "I seem to be wasting my time."
+      },
       "useOn": {
         "dust": {
           "text": "With a few flicks of the wrist, the immediate area around the feather duster is free of dust. Really though, that area was pretty free of dust to begin with. Maybe I could use this somewhere else.",
@@ -140,17 +140,15 @@
         "If I had some supplies, I could probably lift this Fingerprint from the glass",
         "Yep… Fingerprint."
       ],
-      "take": [],
-      "open": [
-        "If this were a scotch bottle, I might see where this was going. However since it’s a scotch glass, I’m not sure what I’d be trying to accomplish.",
-        "Open a glass?",
-        "I seem to be wasting my time."
-      ],
-      "close": [
-        "Now that I think about it, I don’t really see any way to close a scotch glass.",
-        "Yep, still not seeing a way to close it, nor a reason to.",
-        "I seem to be wasting my time."
-      ],
+      "take": {
+        "text": ""
+      },
+      "open": {
+        "text": "If this were a scotch bottle, I might see where this was going. However since it’s a scotch glass, I’m not sure what I’d be trying to accomplish."
+      },
+      "close": {
+        "text": "Now that I think about it, I don’t really see any way to close a scotch glass."
+      },
       "useOn": {
         "self": {
           "text": "I’m thinking it’s probably best I don’t drink while on the job."
@@ -165,9 +163,9 @@
         "I can see fingerprints on the glass. It's a good thing those aren't my prints.",
         "It would be easy to identify whoever has these greasy hands if they ever committed any crimes."
       ],
-      "take": [
-        "<text>"
-      ]
+      "take": {
+        "text": "<text>"
+      }
     },
     "Tape": {
       "look": [
@@ -180,9 +178,9 @@
         "This kind of tape has many uses.",
         "I bet this would come in handy."
       ],
-      "take": [
-        "I got me some Scotch Tape now!"
-      ],
+      "take": {
+        "text": "I got me some Scotch Tape now!"
+      },
       "useOn": {
         "Tumbler Glass": {
           "text": "Hrmm, I’m pretty sure there’s something I’m supposed to do before I use the tape."
