@@ -17,8 +17,6 @@ class Level {
     private MAX_FADE_AMOUNT: number = 0.3;
 
     constructor(game: Phaser.Game, data: LevelData){
-        console.log(HouseItems.TUMBLER_GLASS);
-        HouseItems.TUMBLER_GLASS = !HouseItems.TUMBLER_GLASS;
         this.game = game;
         this.data = data;
         this.myInput = new Input(this.game);

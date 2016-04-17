@@ -1,26 +1,19 @@
-class HouseItems {
-    static _TUMBLER_GLASS = "Tumbler_Glass";
-    static get TUMBLER_GLASS():Boolean { return "true" === localStorage.getItem(HouseItems._TUMBLER_GLASS) }
-    static set TUMBLER_GLASS(newValue: Boolean) { localStorage.setItem(HouseItems._TUMBLER_GLASS, "" + newValue) }
-
-    static FEATHER_DUSTER = new IndividualHouseItem("Feather Duster")
-}
-
 class IndividualHouseItem {
-    name = ""
-    has = false
-    interactCount = 0
+    public itemName: string;
+    public itemState: ItemState;
 
-    constructor(name: string)
-
-    get()
-
-    set()
-
-    get()
-
-    set()
+    constructor(name: string) {
+        this.itemName = name;
+    }
 }
 
-
-if ()
+class HouseItems {
+    static DUST = new IndividualHouseItem("Dust");
+    static DUST_PILE = new IndividualHouseItem("Dust Pile");
+    static ENVELOPE = new IndividualHouseItem("Envelope");
+    static DUST_FILLED_ENVELOPE = new IndividualHouseItem("Dust Filled Envelope");
+    static FEATHER_DUSTER = new IndividualHouseItem("Feather Duster");
+    static TUMBLER_GLASS = new IndividualHouseItem("Tumbler Glass");
+    static DUSTY_GLASS = new IndividualHouseItem("Dusty Glass");
+    static TAPE = new IndividualHouseItem("Tape");
+}

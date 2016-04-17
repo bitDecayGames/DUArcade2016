@@ -1,6 +1,6 @@
 {
   "items": {
-    "dust": {
+    "Dust": {
       "look": [
         "Absolutely filthy! Look at all this dust!",
         "You know, they say that dust is 80% composed of dead skin cells.",
@@ -24,7 +24,7 @@
         "I’d probably better take it first."
       ]
     },
-    "dust_pile": {
+    "Dust Pile": {
       "look": [
         "Well at least the dust is piled up now."
       ],
@@ -44,7 +44,7 @@
         "I’d probably better take it first."
       ]
     },
-    "envelope": {
+    "Envelope": {
       "look": [
         "A rather run of the mill empty Envelope.",
         "Never seen an envelope before huh? Get a gooood look.",
@@ -65,20 +65,44 @@
         "Open or closed, without anything inside it really makes no difference."
       ],
       "useOn": {
-        "dust_pile": {
+        "Dust Pile": {
           "text": "Barely any of this dust fits in the envelope, but at least I'm cleaning some of it up.",
           "reward": [
-            "dust_filled_envelope"
+            "Dust Filled Envelope"
           ],
           "price": [
-            "envelope"
+            "Envelope"
           ]
         }
       }
     },
-    "dust_filled_envelope": {
+    "Dust Filled Envelope": {
+      "look": [
+        "<text>"
+      ],
+      "inspect": [
+        "<text>"
+      ],
+      "take": [
+        "<text>"
+      ],
+      "open": [
+        "<text>"
+      ],
+      "close": [
+        "<text>"
+      ],
+      "useOn": {
+        "Tumbler Glass": {
+          "text": "I'll just sprinkle some of this here. Looks like this guy has some greasy mitts, the dust clings to where his hand touched the glass surprisingly well.",
+          "replaceReceiverWith": "Dusty Glass",
+          "price": [
+            "Dust Filled Envelope"
+          ]
+        }
+      }
     },
-    "feather_duster": {
+    "Feather Duster": {
       "look": [
         "It’s one of those feather dusters like one might imagine a sexy french maid might use.",
         "Mmmmmmm… Sexy French maid… Err, what was I doing again?",
@@ -101,11 +125,11 @@
       "useOn": {
         "dust": {
           "text": "With a few flicks of the wrist, the immediate area around the feather duster is free of dust. Really though, that area was pretty free of dust to begin with. Maybe I could use this somewhere else.",
-          "replaceReceiverWith": "dust_pile"
+          "replaceReceiverWith": "Dust Pile"
         }
       }
     },
-    "tumbler_glass": {
+    "Tumbler Glass": {
       "look": [
         "It’s a rather nice looking tumbler.",
         "Unfortunately the glass is empty, and there’s no sign of any scotch nearby.",
@@ -116,8 +140,7 @@
         "If I had some supplies, I could probably lift this Fingerprint from the glass",
         "Yep… Fingerprint."
       ],
-      "take": [
-      ],
+      "take": [],
       "open": [
         "If this were a scotch bottle, I might see where this was going. However since it’s a scotch glass, I’m not sure what I’d be trying to accomplish.",
         "Open a glass?",
@@ -134,7 +157,19 @@
         }
       }
     },
-    "tape": {
+    "DustyGlass": {
+      "look": [
+        "This thing is holding an astonishing amount of dust on it."
+      ],
+      "inspect": [
+        "I can see fingerprints on the glass. It's a good thing those aren't my prints.",
+        "It would be easy to identify whoever has these greasy hands if they ever committed any crimes."
+      ],
+      "take": [
+        "<text>"
+      ]
+    },
+    "Tape": {
       "look": [
         "It’s a tape dispenser. Nothing particularly special.",
         "Good old fashioned clear tape.",
@@ -149,11 +184,11 @@
         "I got me some Scotch Tape now!"
       ],
       "useOn": {
-        "tumbler_glass": {
+        "Tumbler Glass": {
           "text": "Hrmm, I’m pretty sure there’s something I’m supposed to do before I use the tape."
         },
-        "dusty_glass": {
-          "text": "This must be what McGyver feels like every got damn day! I’ve lifted a perfect Fingerprint from the Tumbler Glass."
+        "Dusty Glass": {
+          "text": "This must be what McGyver feels like every got damn day! I’ve lifted a perfect Fingerprint from the Tumbler Glass.",
           "reward": [
             "fingerprint"
           ],
@@ -162,6 +197,9 @@
           ]
         }
       }
+    },
+    "death": {
+
     }
   }
 }
