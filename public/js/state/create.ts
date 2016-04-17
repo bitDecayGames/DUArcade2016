@@ -70,6 +70,12 @@ class CreateLevel extends Phaser.State {
         this.floorBrush.create();
         this.wallBrush.create();
         this.obstacleBrush.create();
+
+        // Save - 1
+        this.game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(this.save, this);
+
+        // Download - 2
+        this.game.input.keyboard.addKey(Phaser.Keyboard.TWO).onDown.add(this.download, this);
     }
 
     update(){
@@ -140,8 +146,13 @@ class CreateLevel extends Phaser.State {
         else if (this.myInput.isDown(InputType.WASD_DOWN)) this.game.camera.y += this.cameraSpeed;
 
         if (this.myInput.isJustDown(InputType.ESCAPE)) {
-            if (this.editorStateActivated) this.editorStateActivated = false;
-            else this.download();
+            if (this.editorStateActivated) {
+                this.editorStateActivated = false;
+            } else {
+                this.save();
+                this.game.camera.setPosition(0, 0);
+                this.game.state.start("menu");
+            }
         }
 
         if (this.myInput.isJustDown(InputType.ACTION)) this.drawInOrder();
@@ -194,11 +205,17 @@ class CreateLevel extends Phaser.State {
 
     private reset
 
-    download(){
+    download() {
+        this.save().then(function onSucess(url:string) {
+            window.open(url, "_blank");
+        });
+    }
+
+    save():Promise<string> {
         var serializeSprites = s=>{return {img: s.key, x: s.x, y: s.y, w: s.width, h: s.height, r: 0}};
 
         var data = {
-            name: "Test Level",
+            name: "level-0",
             camera:{
                 follow: false,
                 viewport: {
@@ -231,15 +248,12 @@ class CreateLevel extends Phaser.State {
         };
 
         var $:any = window["$"]; // jquery
-        $.ajax({
+        return $.ajax({
             method: "POST",
             url: "/level/" + data.name,
             data: JSON.stringify(data),
             headers: {
                 "Content-Type": "application/json"
-            },
-            success: (result) => {
-                window.open(result, "_blank");
             }
         });
     }

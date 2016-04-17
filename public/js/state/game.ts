@@ -15,7 +15,7 @@ class DUArcade2016Game extends Phaser.State {
     init(levelName:string) {
         this.levelName = levelName;
         if (!this.levelName) {
-            this.levelName = "test-level-0";
+            this.levelName = "level-0";
         }
     }
 
