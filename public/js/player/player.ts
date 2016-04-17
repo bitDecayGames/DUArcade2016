@@ -17,7 +17,6 @@ class Player {
         this.sprite.scale.setTo(1, 2);
         this.body = this.game.physics.p2.createBody(0, 0, 10, true);
         this.body.setCircle(this.sprite.width / 2 + 2, 0, 0, 0);
-        this.body.debug = true;
     }
 
     update(){
