@@ -22,7 +22,9 @@ app.post(LEVEL_ROUTE, bodyParser.json(), function(req, res) {
 });
 
 
-app.get("/data/levels/:name", function(req, res){ res.download(__dirname + "/../public/data/levels/" + req.params.name) });
+app.get("/data/levels/:name", function(req, res) {
+    res.download(__dirname + "/../public/data/levels/" + req.params.name)
+});
 
 // Bulk asset endpoints
 const ASSET_ROUTE:string = "/assets/:dirName";
