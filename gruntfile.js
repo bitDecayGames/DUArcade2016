@@ -12,14 +12,12 @@ module.exports = function(grunt) {
             server: {
                 files: [
                     {src: ["server/**/*.ts"], dest: "build/server"}
-                ],
-                module: "commonjs"
+                ]
             },
             frontend: {
                 files: [
                     {src: ["public/js/**/*.ts", "public/lib/**/*.ts"], dest: "build/public"}
-                ],
-                out: "build/public/js/app.js"
+                ]
             }
         },
         less: {
