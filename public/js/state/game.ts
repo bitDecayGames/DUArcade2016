@@ -1,4 +1,5 @@
 class DUArcade2016Game extends Phaser.State {
+    levelName:string;
     level: Level;
 
     preload() {
@@ -7,16 +8,32 @@ class DUArcade2016Game extends Phaser.State {
         this.load.json('items', '../../data/interaction/interaction.json');
     }
 
+    init(levelName:string) {
+        this.levelName = levelName;
+        if (!this.levelName) {
+            this.levelName = "test-level-0";
+        }
+    }
+
     create() {
         this.game.world.setBounds(0, 0, 1920, 1920);
         this.game.physics.startSystem(Phaser.Physics.P2JS);
         this.game.physics.p2.setBoundsToWorld(false, false, false, false);
-        this.level = new Level(this.game, new LevelData(this.cache.getJSON("test-level-0")));
+
+        this.level = new Level(this.game, new LevelData(this.cache.getJSON(this.levelName)));
+
         var commander = (new MasterCommand(this.game));
         commander.initialLoad();
+
+        var keyR = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+        keyR.onDown.add(this.reloadLevel, this);
     }
 
     update() {
         this.level.update();
+    }
+
+    reloadLevel() {
+        this.game.state.start("game", true, false, this.levelName);
     }
 }
