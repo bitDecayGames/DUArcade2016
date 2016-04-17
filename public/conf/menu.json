@@ -1,6 +1,10 @@
 {
   "buttons": [
     {
+      "text": "Create Level",
+      "state": "create"
+    },
+    {
       "text": "New Game",
       "state": "new"
     },

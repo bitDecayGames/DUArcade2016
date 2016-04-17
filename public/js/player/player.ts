@@ -1,11 +1,12 @@
 class Player {
     game: Phaser.Game;
-    speed: number = 1;
+    speed: number = 300;
     input: Input;
     sprite: Phaser.Sprite;
     moving: boolean;
     nextStep: number = 0;
     stepSpacing: number = 0.5;
+    body: Phaser.Physics.P2.Body;
 
     constructor(game: Phaser.Game, input: Input){
         this.game = game;
@@ -14,37 +15,39 @@ class Player {
         this.sprite = game.add.sprite(0, 0, "apple");
         this.sprite.anchor.setTo(0, 1);
         this.sprite.scale.setTo(1, 2);
-
-        this.moving = false;
+        this.body = this.game.physics.p2.createBody(0, 0, 10, true);
+        this.body.setCircle(this.sprite.width / 2 + 2, 0, 0, 0);
+        this.body.debug = true;
     }
 
     update(){
-
+        this.sprite.x = this.body.x - this.sprite.width / 2;
+        this.sprite.y = this.body.y;
+        this.body.setZeroVelocity();
         this.moving = false;
 
         if(this.input.isDown(InputType.UP)) {
-            this.sprite.y -= this.speed;
+            this.body.moveUp(this.speed);
             this.moving = true;
         }
         else if (this.input.isDown(InputType.DOWN)) {
-            this.sprite.y += this.speed;
+            this.body.moveDown(this.speed);
             this.moving = true;
         }
         if(this.input.isDown(InputType.LEFT)) {
-            this.sprite.x -= this.speed;
+            this.body.moveLeft(this.speed);
             this.moving = true;
         }
         else if (this.input.isDown(InputType.RIGHT)) {
-            this.sprite.x += this.speed;
+            this.body.moveRight(this.speed);
             this.moving = true;
         }
-
-        this.maybePlayWalkSound()
+         this.maybePlayWalkSound()
     }
 
     maybePlayWalkSound() {
         if (this.moving &&  this.game.time.totalElapsedSeconds() > this.nextStep) {
-            this.game.sound.play('step');
+            SoundUtil.playSound(this.game, 'step');
             this.nextStep = this.game.time.totalElapsedSeconds() + this.stepSpacing;
         }
     }

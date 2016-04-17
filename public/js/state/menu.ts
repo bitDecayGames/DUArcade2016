@@ -48,12 +48,12 @@ class Menu extends Phaser.State {
         this.myInput.update();
 
         if (this.myInput.isJustDown(InputType.LEFT) || this.myInput.isJustDown(InputType.UP)){
-            this.game.sound.play('slap');
+            SoundUtil.playSound(this.game, 'slap');
             if (this.selectedIndex <= 0) this.selectedIndex = this.buttons.length - 1;
             else this.selectedIndex -= 1;
             this.markSelected();
         } else if (this.myInput.isJustDown(InputType.RIGHT) || this.myInput.isJustDown(InputType.DOWN)){
-            this.game.sound.play('slap');
+            SoundUtil.playSound(this.game, 'slap');
             if (this.selectedIndex >= this.buttons.length - 1 || this.selectedIndex < 0) this.selectedIndex = 0;
             else this.selectedIndex += 1;
             this.markSelected();
@@ -74,7 +74,7 @@ class Menu extends Phaser.State {
     select(){
         this.buttons.forEach((button, index) => {
             if (index == this.selectedIndex) {
-                this.game.sound.play('raspberry');
+                SoundUtil.playSound(this.game, 'raspberry');
                 this.game.state.start(button.info.state);
             }
         });
