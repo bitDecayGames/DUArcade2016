@@ -26,7 +26,7 @@ class DUArcade2016Game extends Phaser.State {
 
         this.level = new Level(this.game, new LevelData(this.cache.getJSON(this.levelName)));
 
-        var commander = (new MasterCommand(this.game, this.level.player));
+        var commander:MasterCommand = new MasterCommand(this.game, this.level.player);
         commander.initialLoad();
         this.level.player.setFollowingText(new FollowingText(this.game, this.level.player, 10, commander.look(HouseItems.DUST)));
 
