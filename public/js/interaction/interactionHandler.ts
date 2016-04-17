@@ -92,29 +92,29 @@ class MasterCommand {
 
    reward(rewards: string[]) {
         console.log("Processing rewards");
-        this.changeItemStates(rewards, ItemState.INVENTORY;
+        this.changeItemStates(rewards, ItemState.INVENTORY);
    }
 
    price(prices: string[]) {
         console.log("Processing prices");
-        this.changeItemStates(rewards, ItemState.INACTIVE;
+        this.changeItemStates(prices, ItemState.INACTIVE);
    }
 
    deactivateItems(itemsByName: string[]) {
         console.log("Processing deactivations");
-        this.changeItemStates(rewards, ItemState.INACTIVE;
+        this.changeItemStates(itemsByName, ItemState.INACTIVE);
    }
 
    activateItems(itemsByName: string[]) {
         console.log("Processing activations");
-        this.changeItemStates(rewards, ItemState.MAP_ACTIVE;
+        this.changeItemStates(itemsByName, ItemState.MAP_ACTIVE);
    }
 
    saveToLocalStorage(item: IndividualHouseItem) {
         localStorage.setItem(item.itemName, JSON.stringify(item));
    }
 
-   changeItemState(itemsByName: string[], state: ItemState) {
+   changeItemStates(itemsByName: string[], state: ItemState) {
         itemsByName.forEach(itemName => {
             console.log("Processing item: " + itemName);
             var itemFromList = this.findItem(itemName);
@@ -125,7 +125,7 @@ class MasterCommand {
    }
 
    findItem(itemName: string): IndividualHouseItem {
-        console.log("Looking for: " + itemName)
+        console.log("Looking for: " + itemName);
         return HouseItems.ITEM_LIST.find(item => {
             console.log("Comparing with " + item.itemName);
             return item.itemName === itemName;
