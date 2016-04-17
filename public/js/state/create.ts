@@ -48,7 +48,7 @@ class CreateLevel extends Phaser.State {
 
         var itemAssets = [];
 
-        var images = this.cache.getJSON("images").images;
+        var images = AssetsUtil.getAssetUrls(this.game.cache, Asset.IMAGES);
         images.forEach((image) => {
             if (image.path.includes("walls/")) {
                 wallAssets.push(image.name);

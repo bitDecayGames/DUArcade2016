@@ -87,8 +87,8 @@ class ImageSelect {
 
     update(){
         this.drawSelectRect();
-        if (this.isMovingVertical) this.movingVertical(this.isMovingUp);
-        else if (this.isMovingHorizontal) this.movingHorizontal(this.isMovingLeft);
+        if (this.isMovingVertical) this.movingVertical();
+        else if (this.isMovingHorizontal) this.movingHorizontal();
         else {
             if (this.input.isJustDown(InputType.ARROW_LEFT)) this.moveHorizontal(true);
             else if (this.input.isJustDown(InputType.ARROW_RIGHT)) this.moveHorizontal(false);
