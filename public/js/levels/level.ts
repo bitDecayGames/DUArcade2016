@@ -63,6 +63,22 @@ class Level {
             //body.body.debug = true;
             body.body.static = true;
         });
+
+        this.sprites.forEach(sprite => {
+            console.log("Sprite key: " + sprite.key);
+            HouseItems.ITEM_LIST.forEach(item => {
+                if (sprite.key === item.imageKey) {
+                    console.log("Match found for: " + item.imageKey);
+                    // this is an item we need to watch for events.
+                    sprite.inputEnabled = true;
+                    sprite.events.onInputDown.add(this.clickHappened, this);
+                }
+            });
+        });
+    }
+
+    clickHappened(sprite, pointer) {
+        console.log("you clicked on " + sprite.key);
     }
 
     changeFacing(){
