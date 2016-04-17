@@ -8,6 +8,8 @@ class Player {
     stepSpacing: number = 0.5;
     body: Phaser.Physics.P2.Body;
 
+    followingText: FollowingText;
+
     constructor(game: Phaser.Game, input: Input){
         this.game = game;
         this.input = input;
@@ -42,6 +44,18 @@ class Player {
             this.moving = true;
         }
          this.maybePlayWalkSound()
+
+         if (this.followingText) {
+            this.followingText.update();
+         }
+    }
+
+    setFollowingText(text: FollowingText) {
+        this.followingText = text;
+    }
+
+    clearFollowingText() {
+        this.followingText = null;
     }
 
     maybePlayWalkSound() {
