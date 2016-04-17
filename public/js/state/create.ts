@@ -93,7 +93,7 @@ class CreateLevel extends Phaser.State {
     create(){
         this.floorBrush.create();
         this.wallBrush.create();
-        this.obstacleBrush.create()
+        this.obstacleBrush.create();
 
         // Save - 1
         this.game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(this.save, this);
