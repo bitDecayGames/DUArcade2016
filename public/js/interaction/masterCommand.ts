@@ -2,12 +2,11 @@ class MasterCommand {
     static FALLBACK_MSG = "I seem to be wasting my time."
 
     private game: Phaser.Game;
-    private player: Player;
+    public player: Player;
     private items;
 
-   constructor(game: Phaser.Game, player: Player) {
+   constructor(game: Phaser.Game) {
         this.game = game;
-        this.player = player;
         this.items = game.cache.getJSON('items');
    }
 
@@ -25,6 +24,12 @@ class MasterCommand {
                 item.inspectCount = itemJSON["inspectCount"]
             }
         });
+   }
+
+   // Event functions
+   itemClicked(sprite, pointer) {
+       var item = this.findItem(sprite.key);
+       console.log(item);
    }
 
    look(item: IndividualHouseItem):string {
@@ -131,7 +136,7 @@ class MasterCommand {
         console.log("Looking for: " + itemName);
         return HouseItems.ITEM_LIST.find(item => {
             console.log("Comparing with " + item.itemName);
-            return item.itemName === itemName;
+            return item.itemName === itemName || item.imageKey === itemName;
         });
    }
 }

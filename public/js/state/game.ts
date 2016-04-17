@@ -24,10 +24,9 @@ class DUArcade2016Game extends Phaser.State {
         this.game.physics.startSystem(Phaser.Physics.P2JS);
         this.game.physics.p2.setBoundsToWorld(false, false, false, false);
 
-        this.level = new Level(this.game, new LevelData(this.cache.getJSON(this.levelName)));
+        var commander = (new MasterCommand(this.game));
 
-        var commander = (new MasterCommand(this.game, this.level.player));
-        commander.initialLoad();
+        this.level = new Level(this.game, new LevelData(this.cache.getJSON(this.levelName)), commander);
         this.level.player.setFollowingText(new FollowingText(this.game, this.level.player, 10, commander.look(HouseItems.DUST)));
 
         var keyR = this.game.input.keyboard.addKey(Phaser.Keyboard.R);

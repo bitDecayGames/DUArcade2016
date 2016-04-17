@@ -1,5 +1,6 @@
 class Level {
     private game: Phaser.Game;
+    public commander: MasterCommand;
     private myInput: Input;
     public player: Player;
 
@@ -16,9 +17,11 @@ class Level {
     private FADE_AMOUNT: number = 0.05;
     private MAX_FADE_AMOUNT: number = 0.3;
 
-    constructor(game: Phaser.Game, data: LevelData){
+    constructor(game: Phaser.Game, data: LevelData, c: MasterCommand){
         this.game = game;
         this.data = data;
+        this.commander = c;
+        this.commander.initialLoad();
         this.myInput = new Input(this.game);
 
         this.orderedFadingRenderGroup = this.game.add.group();
@@ -28,6 +31,8 @@ class Level {
         this.player.body.y = 175;
         this.orderedFadingRenderGroup.add(this.player.sprite);
         this.game.camera.follow(this.player.sprite);
+
+        this.commander.player = this.player;
 
         this.sprites = [];
         this.data.floorplan.floor.forEach((s)=>{
@@ -71,14 +76,10 @@ class Level {
                     console.log("Match found for: " + item.imageKey);
                     // this is an item we need to watch for events.
                     sprite.inputEnabled = true;
-                    sprite.events.onInputDown.add(this.clickHappened, this);
+                    sprite.events.onInputDown.add(c.itemClicked, c);
                 }
             });
         });
-    }
-
-    clickHappened(sprite, pointer) {
-        console.log("you clicked on " + sprite.key);
     }
 
     changeFacing(){
