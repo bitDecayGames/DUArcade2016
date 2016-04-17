@@ -56,8 +56,8 @@ class InputState {
         this[InputType.SPACE] = keyboard && keyboard.isDown(Phaser.Keyboard.SPACEBAR);
         this[InputType.CLICK] = pointer && pointer.isDown;
         this[InputType.SHIFT] = keyboard && keyboard.isDown(Phaser.Keyboard.SHIFT);
-        this[InputType.PLUS] = keyboard && keyboard.isDown(Phaser.Keyboard.PLUS);
-        this[InputType.MINUS] = keyboard && keyboard.isDown(Phaser.Keyboard.MINUS);
+        this[InputType.PLUS] = keyboard && keyboard.isDown(Phaser.Keyboard.EQUALS);
+        this[InputType.MINUS] = keyboard && keyboard.isDown(Phaser.Keyboard.UNDERSCORE);
         this[InputType.ARROW_UP] = keyboard && keyboard.isDown(Phaser.Keyboard.UP);
         this[InputType.ARROW_DOWN] = keyboard && keyboard.isDown(Phaser.Keyboard.DOWN);
         this[InputType.ARROW_LEFT] = keyboard && keyboard.isDown(Phaser.Keyboard.LEFT);

@@ -11,8 +11,6 @@ class DrawRectangle {
         this.callback = callback;
         if (rects) this.rects = rects;
         else this.rects = new MyDrawRectangles(game);
-
-        console.log("CameraPosition: " + JSON.stringify(this.game.camera.position));
     }
 
     private mousePos():Phaser.Point{return new Phaser.Point((this.game.camera.position.x - this.game.width / 2) + this.game.input.x, (this.game.camera.position.y - this.game.height / 2) + this.game.input.y)}
@@ -117,13 +115,15 @@ class MyDrawRectangles{
     }
 
     rotate(degrees:number, rotationPoint:Phaser.Point){
-        var steps = parseInt(degrees / 90);
+        var steps = Math.round(degrees / 90);
         if (steps === 0 || steps % 4 === 0) return; // noop
         var shouldStretchRect = steps % 2 !== 0;
-        var shouldReflectRect = steps != 0;
-        this.rects.forEach(rect => {
+        var shouldReflectRect = steps / 2 === 0;
+        this.rects.forEach((rect:Phaser.Rectangle) => {
             var p = new Phaser.Point(rect.x, rect.y);
             p.rotate(rotationPoint.x, rotationPoint.y, degrees, true);
+            rect.x = p.x;
+            rect.y = p.y;
             if (shouldStretchRect){
                 var w = rect.width;
                 var h = rect.height;
@@ -133,10 +133,9 @@ class MyDrawRectangles{
             if (shouldReflectRect){
                 rect.x -= rect.width;
                 rect.y -= rect.height;
-            } else if (steps < 0) rect.x -= rect.width;
-            else rect.y -= rect.height;
-            rect.x = p.x;
-            rect.y = p.y;
+            } else if (steps < 0) rect.y -= rect.height;
+            else rect.x -= rect.width;
         });
+        this.draw();
     }
 }

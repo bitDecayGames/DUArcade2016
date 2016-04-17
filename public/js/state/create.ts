@@ -22,9 +22,11 @@ class CreateLevel extends Phaser.State {
 
     private currentRotationalOffset = 0;
 
+    private BIG_NUMBER = 10000000;
+
 
     preload(){
-        this.game.world.setBounds(-1024, -1024, 2048, 2048);
+        this.game.world.setBounds(-this.BIG_NUMBER, -this.BIG_NUMBER, this.BIG_NUMBER * 2, this.BIG_NUMBER * 2);
 
         this.floorplanLines = new MyDrawLines(this.game, Phaser.Color.getColor(200, 55, 255));
         this.obstacleBodies = new MyDrawRectangles(this.game, Phaser.Color.getColor(253, 145, 10));
@@ -163,34 +165,34 @@ class CreateLevel extends Phaser.State {
     private drawInOrder(){
         switch(EditorState.states[this.editorStateIndex]){
             case EditorState.NORTH:
-                this.north.forEach(s => s.visible = true);
-                this.east.forEach(s => s.visible = false);
-                this.south.forEach(s => s.visible = false);
-                this.west.forEach(s => s.visible = false);
+                this.north.forEach((s:Phaser.Sprite) => s.visible = true);
+                this.east.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.south.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.west.forEach((s:Phaser.Sprite) => s.visible = false);
                 break;
             case EditorState.EAST:
-                this.north.forEach(s => s.visible = false);
-                this.east.forEach(s => s.visible = true);
-                this.south.forEach(s => s.visible = false);
-                this.west.forEach(s => s.visible = false);
+                this.north.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.east.forEach((s:Phaser.Sprite) => s.visible = true);
+                this.south.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.west.forEach((s:Phaser.Sprite) => s.visible = false);
                 break;
             case EditorState.SOUTH:
-                this.north.forEach(s => s.visible = false);
-                this.east.forEach(s => s.visible = false);
-                this.south.forEach(s => s.visible = true);
-                this.west.forEach(s => s.visible = false);
+                this.north.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.east.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.south.forEach((s:Phaser.Sprite) => s.visible = true);
+                this.west.forEach((s:Phaser.Sprite) => s.visible = false);
                 break;
             case EditorState.WEST:
-                this.north.forEach(s => s.visible = false);
-                this.east.forEach(s => s.visible = false);
-                this.south.forEach(s => s.visible = false);
-                this.west.forEach(s => s.visible = true);
+                this.north.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.east.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.south.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.west.forEach((s:Phaser.Sprite) => s.visible = true);
                 break;
             default:
-                this.north.forEach(s => s.visible = false);
-                this.east.forEach(s => s.visible = false);
-                this.south.forEach(s => s.visible = false);
-                this.west.forEach(s => s.visible = false);
+                this.north.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.east.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.south.forEach((s:Phaser.Sprite) => s.visible = false);
+                this.west.forEach((s:Phaser.Sprite) => s.visible = false);
                 break;
         }
 
@@ -202,8 +204,8 @@ class CreateLevel extends Phaser.State {
     private rotate(degrees:number){
         this.currentRotationalOffset += degrees;
         var rotationPoint = new Phaser.Point(
-            this.game.camera.x,
-            this.game.camera.y
+            this.game.camera.x + this.game.width / 2,
+            this.game.camera.y + this.game.height / 2
         );
 
         this.floorplanLines.rotate(degrees, rotationPoint);
@@ -217,7 +219,7 @@ class CreateLevel extends Phaser.State {
 
     private rotateListOfSprites(sprites:Phaser.Sprite[], degrees:number, rotationPoint:Phaser.Point){
         var rads = Phaser.Math.degToRad(degrees);
-        sprites.forEach((sprite)=>{
+        sprites.forEach((sprite:Phaser.Sprite)=>{
             var p = new Phaser.Point(sprite.x, sprite.y);
             p.rotate(rotationPoint.x, rotationPoint.y, degrees, true);
             sprite.x = p.x;

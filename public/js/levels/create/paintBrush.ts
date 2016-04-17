@@ -5,6 +5,8 @@ class PaintBrush {
     private spritePicker:ImageSelect;
     private currentSpriteStamp: Stamp;
     private sprites:Phaser.Sprite[] = [];
+    private selectedSpriteIndex:number = -1;
+    private selectedSpriteHighlightColor:number = Phaser.Color.getColor(255, 255, 100);
 
     private _isActive = false;
 
@@ -36,6 +38,7 @@ class PaintBrush {
 
     update(){
         if (this._isActive) {
+            var curSprite = this.selectedSprite();
             var moveAmount = this.snap;
             if (!this.input.isDown(InputType.SHIFT)) moveAmount = 1;
 
@@ -50,16 +53,20 @@ class PaintBrush {
                 this.spritePicker.enter(pickedSprite => {
                     this.currentSpriteStamp = new Stamp(this.game, this.input, this.game.add.sprite(0, 0, pickedSprite.key), stampedSprite => {
                         this.sprites.push(stampedSprite);
+                        this.selectLastSprite();
                     }, this.currentRotationRadians);
                 });
             }
-            else if (this.input.isJustDown(InputType.DELETE) && this.sprites.length > 0) {
-                this.sprites.splice(this.sprites.length - 1, 1).forEach(s => s.kill());
-            }
-            else if (this.input.isJustDown(InputType.ARROW_LEFT) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].x -= moveAmount;
-            else if (this.input.isJustDown(InputType.ARROW_RIGHT) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].x += moveAmount;
-            else if (this.input.isJustDown(InputType.ARROW_UP) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y -= moveAmount;
-            else if (this.input.isJustDown(InputType.ARROW_DOWN) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y += moveAmount;
+            else if (this.input.isJustDown(InputType.DELETE) && curSprite) this.deleteSelectedSprite();
+            else if (this.input.isJustDown(InputType.ARROW_LEFT) && curSprite) curSprite.x -= moveAmount;
+            else if (this.input.isJustDown(InputType.ARROW_RIGHT) && curSprite) curSprite.x += moveAmount;
+            else if (this.input.isJustDown(InputType.ARROW_UP) && curSprite) curSprite.y -= moveAmount;
+            else if (this.input.isJustDown(InputType.ARROW_DOWN) && curSprite) curSprite.y += moveAmount;
+            else if (this.input.isJustDown(InputType.LESS_THAN)) this.selectPrevSprite();
+            else if (this.input.isJustDown(InputType.GREATER_THAN)) this.selectNextSprite();
+            else if (this.input.isJustDown(InputType.PLUS)) this.moveSelectedSpriteForward();
+            else if (this.input.isJustDown(InputType.MINUS)) this.moveSelectedSpriteBack();
+
 
             if (this.input.isJustDown(InputType.ESCAPE) && this.callback) {
                 this._isActive = false;
@@ -71,5 +78,54 @@ class PaintBrush {
                 this.callback = null;
             }
         }
+    }
+
+    private selectedSprite():Phaser.Sprite {
+        return this.sprites[this.selectedSpriteIndex];
+    }
+
+    private selectNextSprite(){
+        if (this.selectedSpriteIndex + 1 < this.sprites.length) this.selectedSpriteIndex += 1
+        this.highlightSelectedSprite();
+    }
+
+    private selectPrevSprite(){
+        if (this.selectedSpriteIndex - 1 >= 0) this.selectedSpriteIndex -= 1
+        this.highlightSelectedSprite();
+    }
+
+    private selectLastSprite(){
+        this.selectedSpriteIndex = this.sprites.length - 1;
+        this.highlightSelectedSprite();
+    }
+
+    private deleteSelectedSprite(){
+        this.sprites.splice(this.selectedSpriteIndex, 1).forEach(s => s.kill());
+    }
+
+    private moveSelectedSpriteBack(){
+        console.log("move back");
+        if (this.selectedSpriteIndex - 1 >= 0) {
+            var spr = this.sprites.splice(this.selectedSpriteIndex, 1)[0];
+            this.selectedSpriteIndex -= 1;
+            this.sprites.splice(this.selectedSpriteIndex, 0, spr);
+        }
+    }
+
+    private moveSelectedSpriteForward(){
+        console.log("move forward");
+        if (this.selectedSpriteIndex + 1 < this.sprites.length) {
+            var spr = this.sprites.splice(this.selectedSpriteIndex, 1)[0];
+            this.selectedSpriteIndex += 1;
+            this.sprites.splice(this.selectedSpriteIndex, 0, spr);
+        }
+    }
+
+    private highlightSelectedSprite(){
+        var curSprite = this.selectedSprite();
+        this.sprites.forEach((s:Phaser.Sprite) => {
+            if (s === curSprite) s.tint = this.selectedSpriteHighlightColor;
+            else s.tint = 0xFFFFFF;
+        });
     }
 }

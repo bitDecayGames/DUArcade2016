@@ -101,5 +101,6 @@ class MyDrawLines{
         this.points.forEach(point =>{
             point.rotate(rotationPoint.x, rotationPoint.y, degrees, true);
         });
+        this.draw();
     }
 }
