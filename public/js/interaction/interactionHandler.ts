@@ -1,4 +1,6 @@
 class MasterCommand {
+    static FALLBACK_MSG = "I seem to be wasting my time."
+
     private game: Phaser.Game;
     private items;
 
@@ -24,23 +26,86 @@ class MasterCommand {
    }
 
    look(item: IndividualHouseItem):string {
-    console.log("Looking at " + item.itemName);
-    var index = item.lookCount;
-    item.lookCount++
-    localStorage.setItem(item.itemName, JSON.stringify(item))
+       return this.processVisualAction("look", item);
+   }
 
-    var itemData = this.items["items"][item.itemName]
-    console.log(itemData);
-    if ("look" in itemData) {
-        var options = itemData["look"]
-        console.log(index)
-        console.log(options)
-        if (index < options.length) {
-            return options[index]
-        } else {
-            return options[options.length - 1]
+   inspect(item: IndividualHouseItem):string {
+       return this.processVisualAction("inspect", item);
+   }
+
+   take(item: IndividualHouseItem):string {
+       return this.processEffectAction("take", item);
+   }
+
+   open(item: IndividualHouseItem):string {
+       return this.processEffectAction("open", item);
+   }
+
+   close(item: IndividualHouseItem):string {
+       return this.processEffectAction("close", item);
+   }
+
+   interact(item: IndividualHouseItem):string {
+       return this.processEffectAction("interact", item);
+   }
+
+
+
+   //utility methods
+   processVisualAction(action: string, item: IndividualHouseItem):string {
+       console.log("Trying to " + action + " " + item.itemName);
+       var index = item[action + "Count"];
+       item[action + "Count"]++
+       this.saveToLocalStorage(item);
+
+       var itemData = this.items["items"][item.itemName]
+       console.log(itemData);
+       if (action in itemData) {
+           var options = itemData[action]
+           console.log(index)
+           console.log(options)
+           if (index < options.length) {
+               return options[index]
+           } else {
+               return options[options.length - 1]
+           }
+       }
+       return MasterCommand.FALLBACK_MSG;
+   }
+
+   processEffectAction(action: string, item: IndividualHouseItem):string {
+        console.log("Trying to " + action + " " + item.itemName);
+        var itemData = this.items["items"][item.itemName];
+        console.log(itemData);
+
+        if (action in itemData) {
+            var actionData = itemData[action]
+            this.reward(actionData["reward"]);
+            this.price(actionData["price"]);
+            this.deactivateItems(actionData["deactivateItems"]);
+            this.activateItems(actionData["activateItems"]);
+            return actionData["text"];
         }
-    }
-    return "k";
+        return MasterCommand.FALLBACK_MSG;
+   }
+
+   reward(rewards: string[]) {
+        // TODO implement
+   }
+
+   price(prices: string[]) {
+        // TODO implement
+   }
+
+   deactivateItems(itemsByName: string[]) {
+        // TODO implement
+   }
+
+   activateItems(itemsByName: string[]) {
+        // TODO implement
+   }
+
+   saveToLocalStorage(item: IndividualHouseItem) {
+        localStorage.setItem(item.itemName, JSON.stringify(item));
    }
 }
