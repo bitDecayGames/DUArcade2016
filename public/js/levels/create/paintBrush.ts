@@ -106,9 +106,10 @@ class PaintBrush {
     private moveSelectedSpriteBack(){
         console.log("move back");
         if (this.selectedSpriteIndex - 1 >= 0) {
-            var spr = this.sprites.splice(this.selectedSpriteIndex, 1)[0];
+            var spr:Phaser.Sprite = this.sprites.splice(this.selectedSpriteIndex, 1)[0];
             this.selectedSpriteIndex -= 1;
             this.sprites.splice(this.selectedSpriteIndex, 0, spr);
+            this.sprites.concat().reverse().forEach(s=>s.sendToBack())
         }
     }
 
@@ -116,8 +117,10 @@ class PaintBrush {
         console.log("move forward");
         if (this.selectedSpriteIndex + 1 < this.sprites.length) {
             var spr = this.sprites.splice(this.selectedSpriteIndex, 1)[0];
+            spr.moveUp();
             this.selectedSpriteIndex += 1;
             this.sprites.splice(this.selectedSpriteIndex, 0, spr);
+            this.sprites.concat().reverse().forEach(s=>s.sendToBack())
         }
     }
 
