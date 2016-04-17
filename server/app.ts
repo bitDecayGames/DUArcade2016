@@ -6,6 +6,9 @@ var express = require("express");
 var fs = require('fs');
 var recursive = require('recursive-readdir');
 
+const GET:string = "GET ";
+const POST:string = "POST ";
+
 var app = express();
 var port = 3000;
 
@@ -14,16 +17,25 @@ var port = 3000;
 const LEVEL_ROUTE:string = "/level/:name";
 app.post(LEVEL_ROUTE, bodyParser.json(), function(req, res) {
     var levelName:string = req.params.name;
-    var pathToFile:string = __dirname + "/../public/data/levels/" + levelName + ".json";
-    var levelJson = req.body;
-    fs.writeFile(pathToFile, JSON.stringify(levelJson, undefined, 4));
+    console.log(POST + LEVEL_ROUTE.replace(":name", levelName));
+
+    var pathToBuildFile:string = "/../public/data/levels/" + levelName + ".json";
+    var pathToRepoFile:string = "/.." + pathToBuildFile;
+
+    var levelJson = JSON.stringify(req.body, undefined, 4);
+    fs.writeFile(__dirname +  + pathToBuildFile, levelJson);
+    fs.writeFile(__dirname + pathToRepoFile, levelJson);
+
     res.send("/data/levels/" + levelName + ".json");
     res.end();
 });
 
+const LEVEL_DOWNLOAD_ROUTE:string = "/data/levels/:name";
+app.get(LEVEL_DOWNLOAD_ROUTE, function(req, res) {
+    var levelName:string = req.params.name;
+    console.log(GET + LEVEL_ROUTE.replace(":name", levelName));
 
-app.get("/data/levels/:name", function(req, res) {
-    res.download(__dirname + "/../public/data/levels/" + req.params.name)
+    res.download(__dirname + "/../public/data/levels/" + levelName)
 });
 
 // Bulk asset endpoints
@@ -47,7 +59,7 @@ const ASSET_DIR:string  = __dirname + "/../public/";
 app.get(ASSET_ROUTE, bodyParser.json(), function(req, res) {
     var dirName:string = req.params.dirName.replace(":", "/");
 
-    console.log(ASSET_ROUTE.replace(":dirName", dirName));
+    console.log(GET + ASSET_ROUTE.replace(":dirName", dirName));
 
     recursive(ASSET_DIR + dirName, function (err, files) {
         var fileJson = {
@@ -79,6 +91,8 @@ app.set("views", __dirname + "/../public/views");
 
 const SCRIPT_DIR:string = __dirname + "/../public/js";
 app.get('/', function (req, res) {
+    console.log(GET + "/views/index.html");
+
     var scriptList = [];
 
     // Get all js files.
