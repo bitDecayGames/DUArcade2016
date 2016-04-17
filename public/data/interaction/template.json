@@ -1,0 +1,36 @@
+{
+  "items": {
+    "<item_name>": {
+      "look": [
+        "<text>"
+      ],
+      "inspect": [
+        "<text>"
+      ],
+      "take": [
+        "<text>"
+      ],
+      "open": [
+        "<text>"
+      ],
+      "close": [
+        "<text>"
+      ],
+      "useOn": {
+        "<objectToInteractWith>": {
+          "text": "<interaction text>",
+          "replaceReceiverWith": "<objectToReplaceTheUseOnObjectWIth",
+          "reward": [
+            "<nameOfItemToGivePlayer>"
+          ],
+          "price": [
+            "<nameOfItemToTakeFromPlayer>"
+          ]
+        }
+      },
+      "interact": [
+        "<text>" //TODO Need to figure out how to have consequences of interacting with things
+      ]
+    }
+  }
+}

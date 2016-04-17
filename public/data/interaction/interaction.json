@@ -1,0 +1,205 @@
+{
+  "items": {
+    "Dust": {
+      "look": [
+        "Absolutely filthy! Look at all this dust!",
+        "You know, they say that dust is 80% composed of dead skin cells.",
+        "I've established that there is dust here, I'm not sure what else to look for."
+      ],
+      "inspect": [
+        "This is is an abnormally thick layer of dust",
+        "Dust, it rhymes with Must.",
+        "I seem to be wasting my time"
+      ],
+      "take": [
+        "I’m going to need to gather up this dust before I can do that."
+      ],
+      "open": [
+        "Open dust… That would be a trick."
+      ],
+      "close": [
+        "Riiiiiight…"
+      ],
+      "interact": [
+        "I’d probably better take it first."
+      ]
+    },
+    "Dust Pile": {
+      "look": [
+        "Well at least the dust is piled up now."
+      ],
+      "inspect": [
+        "It is ready to be swept away."
+      ],
+      "take": [
+        "I can't just put this in my pocket. I need something to hold it in."
+      ],
+      "open": [
+        "Open dust… That would be a trick."
+      ],
+      "close": [
+        "Riiiiiight…"
+      ],
+      "interact": [
+        "I’d probably better take it first."
+      ]
+    },
+    "Envelope": {
+      "look": [
+        "A rather run of the mill empty Envelope.",
+        "Never seen an envelope before huh? Get a gooood look.",
+        "I seem to be wasting my time."
+      ],
+      "inspect": [
+        "It’s an empty envelope with one of those nasty lick to seal flaps on it.",
+        "Its also got a design printed on the inside to keep unscrupulous ilk from being able to read the contents of such an envelope without opening it.",
+        "Its an envelope alright!? Just take it already!"
+      ],
+      "take": [
+        "I’ve taken the envelope."
+      ],
+      "open": [
+        "There’s nothing in the envelope."
+      ],
+      "close": [
+        "Open or closed, without anything inside it really makes no difference."
+      ],
+      "useOn": {
+        "Dust Pile": {
+          "text": "Barely any of this dust fits in the envelope, but at least I'm cleaning some of it up.",
+          "reward": [
+            "Dust Filled Envelope"
+          ],
+          "price": [
+            "Envelope"
+          ]
+        }
+      }
+    },
+    "Dust Filled Envelope": {
+      "look": [
+        "<text>"
+      ],
+      "inspect": [
+        "<text>"
+      ],
+      "take": [
+        "<text>"
+      ],
+      "open": [
+        "<text>"
+      ],
+      "close": [
+        "<text>"
+      ],
+      "useOn": {
+        "Tumbler Glass": {
+          "text": "I'll just sprinkle some of this here. Looks like this guy has some greasy mitts, the dust clings to where his hand touched the glass surprisingly well.",
+          "replaceReceiverWith": "Dusty Glass",
+          "price": [
+            "Dust Filled Envelope"
+          ]
+        }
+      }
+    },
+    "Feather Duster": {
+      "look": [
+        "It’s one of those feather dusters like one might imagine a sexy french maid might use.",
+        "Mmmmmmm… Sexy French maid… Err, what was I doing again?",
+        "I seem to be wasting my time."
+      ],
+      "inspect": [
+        "Did you know? Feather dusters are made with Ostrich feathers. Now you know, and knowing is half the battle.",
+        "It looks like this duster gets used frequently.",
+        "Note to self. It’s a feather duster. No more, no less."
+      ],
+      "take": [
+        "I’ve always wanted a proper feather duster."
+      ],
+      "open": [
+        "After looking extremely closely at the feather duster, I dont find any secret compartments, or anything else that would seem to open. After thinking about it a moment, I feel like a jackass for having tried to open a feather duster."
+      ],
+      "close": [
+        "I seem to be wasting my time."
+      ],
+      "useOn": {
+        "dust": {
+          "text": "With a few flicks of the wrist, the immediate area around the feather duster is free of dust. Really though, that area was pretty free of dust to begin with. Maybe I could use this somewhere else.",
+          "replaceReceiverWith": "Dust Pile"
+        }
+      }
+    },
+    "Tumbler Glass": {
+      "look": [
+        "It’s a rather nice looking tumbler.",
+        "Unfortunately the glass is empty, and there’s no sign of any scotch nearby.",
+        "I seem to be wasting my time."
+      ],
+      "inspect": [
+        "Looking closer, there’s a perfect Fingerprint on the side of the glass",
+        "If I had some supplies, I could probably lift this Fingerprint from the glass",
+        "Yep… Fingerprint."
+      ],
+      "take": [],
+      "open": [
+        "If this were a scotch bottle, I might see where this was going. However since it’s a scotch glass, I’m not sure what I’d be trying to accomplish.",
+        "Open a glass?",
+        "I seem to be wasting my time."
+      ],
+      "close": [
+        "Now that I think about it, I don’t really see any way to close a scotch glass.",
+        "Yep, still not seeing a way to close it, nor a reason to.",
+        "I seem to be wasting my time."
+      ],
+      "useOn": {
+        "self": {
+          "text": "I’m thinking it’s probably best I don’t drink while on the job."
+        }
+      }
+    },
+    "DustyGlass": {
+      "look": [
+        "This thing is holding an astonishing amount of dust on it."
+      ],
+      "inspect": [
+        "I can see fingerprints on the glass. It's a good thing those aren't my prints.",
+        "It would be easy to identify whoever has these greasy hands if they ever committed any crimes."
+      ],
+      "take": [
+        "<text>"
+      ]
+    },
+    "Tape": {
+      "look": [
+        "It’s a tape dispenser. Nothing particularly special.",
+        "Good old fashioned clear tape.",
+        "Oh would you look at that, the tape is still there."
+      ],
+      "inspect": [
+        "Scotch Tape that appears to have nearly the full roll left.",
+        "This kind of tape has many uses.",
+        "I bet this would come in handy."
+      ],
+      "take": [
+        "I got me some Scotch Tape now!"
+      ],
+      "useOn": {
+        "Tumbler Glass": {
+          "text": "Hrmm, I’m pretty sure there’s something I’m supposed to do before I use the tape."
+        },
+        "Dusty Glass": {
+          "text": "This must be what McGyver feels like every got damn day! I’ve lifted a perfect Fingerprint from the Tumbler Glass.",
+          "reward": [
+            "fingerprint"
+          ],
+          "price": [
+            "tape"
+          ]
+        }
+      }
+    },
+    "death": {
+
+    }
+  }
+}
