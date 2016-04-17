@@ -26,25 +26,25 @@ class CreateLevel extends Phaser.State {
 
         this.myInput = new Input(this.game);
         this.floorBrush = new PaintBrush(this.game, this.myInput, [
-            "apple",
-            "button_sprite_sheet",
-            "floor",
-            "placeholder-background",
-            "wall"
+            "floorTile"
         ]);
-        this.wallBrush = new PaintBrush(this.game, this.myInput, [
-            "apple",
-            "button_sprite_sheet",
-            "floor",
-            "placeholder-background",
-            "wall"
-        ]);
+
+        // Get all walls out of the image json.
+        // Some are not in the wall dir, list them manually for now.
+        var wallAssets = [
+            "fireplace",
+            "wallBase"
+        ];
+        var images = this.cache.getJSON("images").images;
+        images.forEach((image) => {
+            if (image.path.includes("walls/")) {
+                wallAssets.push(image.name);
+            }
+        });
+
+        this.wallBrush = new PaintBrush(this.game, this.myInput, wallAssets);
         this.obstacleBrush = new PaintBrush(this.game, this.myInput, [
-            "apple",
-            "button_sprite_sheet",
-            "floor",
-            "placeholder-background",
-            "wall"
+            "table"
         ]);
     }
 
@@ -96,17 +96,17 @@ class CreateLevel extends Phaser.State {
                 case EditorState.EAST:
                     this.wallBrush.enter(sprites => {
                         this.east = sprites;
-                    }, this.east);
+                    }, this.east, Phaser.Math.degToRad(90));
                     break;
                 case EditorState.SOUTH:
                     this.wallBrush.enter(sprites => {
                         this.south = sprites;
-                    }, this.south);
+                    }, this.south, Phaser.Math.degToRad(180));
                     break;
                 case EditorState.WEST:
                     this.wallBrush.enter(sprites => {
                         this.west = sprites;
-                    }, this.west);
+                    }, this.west, Phaser.Math.degToRad(270));
                     break;
             }
         }
@@ -168,7 +168,7 @@ class CreateLevel extends Phaser.State {
     }
 
     download(){
-        var serializeSprites = s=>{return {img: s.key, x: s.x, y: s.y, w: s.width, h: s.height}}
+        var serializeSprites = s=>{return {img: s.key, x: s.x, y: s.y, w: s.width, h: s.height, r: 0}};
 
         var data = {
             name: "Test Level",

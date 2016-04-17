@@ -8,5 +8,6 @@ enum InputType {
     ESCAPE,
     ENTER,
     SPACE,
-    CLICK
+    CLICK,
+    SHIFT
 }

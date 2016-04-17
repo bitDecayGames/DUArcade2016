@@ -49,11 +49,12 @@ class InputState {
         this[InputType.DOWN] = (keyboard && (keyboard.isDown(Phaser.Keyboard.DOWN) || keyboard.isDown(Phaser.Keyboard.S))) || (gamepad && (gamepad.isDown(Phaser.Gamepad.PS3XC_DPAD_DOWN) || gamepad.isDown(Phaser.Gamepad.XBOX360_DPAD_DOWN)));
         this[InputType.LEFT] = (keyboard && (keyboard.isDown(Phaser.Keyboard.LEFT) || keyboard.isDown(Phaser.Keyboard.A))) || (gamepad && (gamepad.isDown(Phaser.Gamepad.PS3XC_DPAD_LEFT) || gamepad.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT)));
         this[InputType.RIGHT] = (keyboard && (keyboard.isDown(Phaser.Keyboard.RIGHT) || keyboard.isDown(Phaser.Keyboard.D))) || (gamepad && (gamepad.isDown(Phaser.Gamepad.PS3XC_DPAD_RIGHT) || gamepad.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT)));
-        this[InputType.ACTION] = (pointer && pointer.isDown) || (keyboard && (keyboard.isDown(Phaser.Keyboard.SPACEBAR) || keyboard.isDown(Phaser.Keyboard.ENTER) || keyboard.isDown(Phaser.Keyboard.SHIFT)));
+        this[InputType.ACTION] = (pointer && pointer.isDown) || (keyboard && (keyboard.isDown(Phaser.Keyboard.SPACEBAR) || keyboard.isDown(Phaser.Keyboard.ENTER)));
         this[InputType.DELETE] = keyboard && (keyboard.isDown(Phaser.Keyboard.BACKSPACE) || keyboard.isDown(Phaser.Keyboard.DELETE));
         this[InputType.ESCAPE] = keyboard && keyboard.isDown(Phaser.Keyboard.ESC);
         this[InputType.ENTER] = keyboard && keyboard.isDown(Phaser.Keyboard.ENTER);
         this[InputType.SPACE] = keyboard && keyboard.isDown(Phaser.Keyboard.SPACEBAR);
         this[InputType.CLICK] = pointer && pointer.isDown;
+        this[InputType.SHIFT] = keyboard && keyboard.isDown(Phaser.Keyboard.SHIFT);
     }
 }

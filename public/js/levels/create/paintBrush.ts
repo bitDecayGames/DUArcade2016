@@ -8,6 +8,10 @@ class PaintBrush {
 
     private _isActive = false;
 
+    private currentRotationRadians:number = 0;
+
+    snap:number = 10;
+
     spriteLocations:string[] = [];
 
     constructor(game: Phaser.Game, input: Input, spriteLocations:string[]){
@@ -21,16 +25,20 @@ class PaintBrush {
         this.spritePicker.create();
     }
 
-    enter(callback:(sprites:Phaser.Sprite[])=>void, sprites?:Phaser.Sprite[]){
+    enter(callback:(sprites:Phaser.Sprite[])=>void, sprites?:Phaser.Sprite[], rotationRadians?:number){
         this._isActive = true;
         this.callback = callback;
         if (sprites) this.sprites = sprites;
+        if (rotationRadians != null) this.currentRotationRadians = rotationRadians;
     }
 
     isActive(){return this._isActive}
 
     update(){
         if (this._isActive) {
+            var moveAmount = 1;
+            if (this.input.isDown(InputType.SHIFT)) moveAmount = this.snap;
+
             if (this.currentSpriteStamp && !this.spritePicker.isVisible()) this.currentSpriteStamp.update();
 
             if (this.spritePicker.isVisible()) this.spritePicker.update();
@@ -42,16 +50,16 @@ class PaintBrush {
                     }
                     this.currentSpriteStamp = new Stamp(this.game, this.input, this.game.add.sprite(0, 0, pickedSprite.key), stampedSprite => {
                         this.sprites.push(stampedSprite);
-                    });
+                    }, this.currentRotationRadians);
                 });
             }
             else if (this.input.isJustDown(InputType.DELETE) && this.sprites.length > 0) {
                 this.sprites.splice(this.sprites.length - 1, 1).forEach(s => s.kill());
             }
-            else if (this.input.isJustDown(InputType.LEFT) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].x -= 1;
-            else if (this.input.isJustDown(InputType.RIGHT) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].x += 1;
-            else if (this.input.isJustDown(InputType.UP) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y -= 1;
-            else if (this.input.isJustDown(InputType.DOWN) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y += 1;
+            else if (this.input.isJustDown(InputType.LEFT) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].x -= moveAmount;
+            else if (this.input.isJustDown(InputType.RIGHT) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].x += moveAmount;
+            else if (this.input.isJustDown(InputType.UP) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y -= moveAmount;
+            else if (this.input.isJustDown(InputType.DOWN) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y += moveAmount;
             else if (this.input.isJustDown(InputType.ESCAPE) && this.callback) {
                 this._isActive = false;
                 if (this.currentSpriteStamp) {

@@ -1,6 +1,7 @@
 //<reference path="./definitions/node.d.ts"/>
 //<reference path="./definitions/express.d.ts"/>
 var bodyParser = require('body-parser');
+var cons = require('consolidate')
 var express = require("express");
 var fs = require('fs');
 var recursive = require('recursive-readdir');
@@ -65,6 +66,33 @@ app.get(IMAGE_ROUTE, bodyParser.json(), function(req, res) {
     });
 });
 
+// Templating
+app.engine("html", cons.mustache);
+app.set("view engine", "html");
+app.set("views", __dirname + "/../public/views");
+
+const SCRIPT_DIR:string = __dirname + "/../public/js";
+app.get('/', function (req, res) {
+    var scriptList = [];
+
+    // Get all js files.
+    recursive(SCRIPT_DIR, function (err, files) {
+        files.forEach((filePath:string) => {
+            if (filePath.indexOf(".map") < 0) {
+                var path:string = filePath.substr(filePath.indexOf('js'));
+                scriptList.push(
+                    {
+                        scriptPath: path
+                    }
+                );
+            }
+        });
+
+        res.render("index.html", {
+            scripts: scriptList
+        });
+    });
+});
 
 app.use(express.static(__dirname + "/../public/"));
 
