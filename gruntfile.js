@@ -18,6 +18,9 @@ module.exports = function(grunt) {
                 files: [
                     {src: ["public/js/**/*.ts", "public/lib/**/*.ts"], dest: "build/public"}
                 ]
+            },
+            options: {
+                target: 'es6'
             }
         },
         less: {
