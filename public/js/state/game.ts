@@ -16,7 +16,7 @@ class DUArcade2016Game extends Phaser.State {
     }
 
     create() {
-        this.game.world.setBounds(0, 0, 1920, 1920);
+        this.game.world.setBounds(-1024, -1024, 2048, 2048);
         this.game.physics.startSystem(Phaser.Physics.P2JS);
         this.game.physics.p2.setBoundsToWorld(false, false, false, false);
 

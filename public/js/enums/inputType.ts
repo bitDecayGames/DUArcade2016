@@ -9,5 +9,17 @@ enum InputType {
     ENTER,
     SPACE,
     CLICK,
-    SHIFT
+    SHIFT,
+    PLUS,
+    MINUS,
+    ARROW_UP,
+    ARROW_DOWN,
+    ARROW_LEFT,
+    ARROW_RIGHT,
+    WASD_UP,
+    WASD_DOWN,
+    WASD_LEFT,
+    WASD_RIGHT,
+    LESS_THAN,
+    GREATER_THAN,
 }

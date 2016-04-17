@@ -18,8 +18,12 @@ class CreateLevel extends Phaser.State {
     private south:Phaser.Sprite[] = [];
     private west:Phaser.Sprite[] = [];
 
+    private cameraSpeed = 5;
+
 
     preload(){
+        this.game.world.setBounds(-1024, -1024, 2048, 2048);
+
         this.floorplanLines = new MyDrawLines(this.game, Phaser.Color.getColor(200, 55, 255));
         this.obstacleBodies = new MyDrawRectangles(this.game, Phaser.Color.getColor(253, 145, 10));
 
@@ -100,7 +104,7 @@ class CreateLevel extends Phaser.State {
         else if (this.obstacleBrush.isActive()) this.obstacleBrush.update();
         else if (this.drawRectangle) this.drawRectangle.update();
         else if (this.drawLines) this.drawLines.update();
-        else if (this.myInput.isJustDown(InputType.ENTER)) {
+        else if (this.myInput.isJustDown(InputType.ACTION)) {
             this.editorStateActivated = true;
             var state = EditorState.states[this.editorStateIndex];
             switch(state){
@@ -143,8 +147,13 @@ class CreateLevel extends Phaser.State {
                     break;
             }
         }
-        else if (this.myInput.isJustDown(InputType.LEFT) && this.editorStateIndex - 1 >= 0) this.editorStateIndex -= 1;
-        else if (this.myInput.isJustDown(InputType.RIGHT) && this.editorStateIndex + 1 < EditorState.states.length) this.editorStateIndex += 1;
+        else if (this.myInput.isJustDown(InputType.ARROW_LEFT) && this.editorStateIndex - 1 >= 0) this.editorStateIndex -= 1;
+        else if (this.myInput.isJustDown(InputType.ARROW_RIGHT) && this.editorStateIndex + 1 < EditorState.states.length) this.editorStateIndex += 1;
+
+        if (this.myInput.isDown(InputType.WASD_LEFT)) this.game.camera.x -= this.cameraSpeed;
+        else if (this.myInput.isDown(InputType.WASD_RIGHT)) this.game.camera.x += this.cameraSpeed;
+        if (this.myInput.isDown(InputType.WASD_UP)) this.game.camera.y -= this.cameraSpeed;
+        else if (this.myInput.isDown(InputType.WASD_DOWN)) this.game.camera.y += this.cameraSpeed;
 
         if (this.myInput.isJustDown(InputType.ESCAPE)) {
             if (this.editorStateActivated) this.editorStateActivated = false;

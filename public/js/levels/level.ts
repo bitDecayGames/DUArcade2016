@@ -60,7 +60,7 @@ class Level {
             var body = this.floorbodies.create(midPoint.x, midPoint.y);
             body.body.setRectangle(distance, 10, 0, 0);
             body.body.angle = rotation;
-            body.body.debug = true;
+            //body.body.debug = true;
             body.body.static = true;
         });
     }

@@ -56,10 +56,10 @@ class PaintBrush {
             else if (this.input.isJustDown(InputType.DELETE) && this.sprites.length > 0) {
                 this.sprites.splice(this.sprites.length - 1, 1).forEach(s => s.kill());
             }
-            else if (this.input.isJustDown(InputType.LEFT) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].x -= moveAmount;
-            else if (this.input.isJustDown(InputType.RIGHT) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].x += moveAmount;
-            else if (this.input.isJustDown(InputType.UP) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y -= moveAmount;
-            else if (this.input.isJustDown(InputType.DOWN) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y += moveAmount;
+            else if (this.input.isJustDown(InputType.ARROW_LEFT) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].x -= moveAmount;
+            else if (this.input.isJustDown(InputType.ARROW_RIGHT) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].x += moveAmount;
+            else if (this.input.isJustDown(InputType.ARROW_UP) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y -= moveAmount;
+            else if (this.input.isJustDown(InputType.ARROW_DOWN) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y += moveAmount;
 
             if (this.input.isJustDown(InputType.ESCAPE) && this.callback) {
                 this._isActive = false;

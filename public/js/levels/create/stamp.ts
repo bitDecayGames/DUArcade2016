@@ -14,6 +14,8 @@ class Stamp {
         if (rotationRadians != null) this.sprite.rotation = rotationRadians;
     }
 
+    private mousePos():Phaser.Point{return new Phaser.Point((this.game.camera.position.x - this.game.width / 2) + this.game.input.x, (this.game.camera.position.y - this.game.height / 2) + this.game.input.y)}
+
     update(){
         if (this.input.isJustDown(InputType.CLICK) && this.callback) {
             var s = this.game.add.sprite(this.sprite.x, this.sprite.y, this.sprite.key);
@@ -21,12 +23,13 @@ class Stamp {
             this.callback(s);
             this.sprite.bringToTop();
         }
-        if (!this.input.isDown(InputType.SHIFT)){
-            this.sprite.x = Math.round(this.game.input.x / this.snap) * this.snap;
-            this.sprite.y = Math.round(this.game.input.y / this.snap) * this.snap;
+        var mousePos = this.mousePos();
+        if (this.input.isUp(InputType.SHIFT)){
+            this.sprite.x = Math.round(mousePos.x / this.snap) * this.snap;
+            this.sprite.y = Math.round(mousePos.y / this.snap) * this.snap;
         } else {
-            this.sprite.x = this.game.input.x;
-            this.sprite.y = this.game.input.y;
+            this.sprite.x = mousePos.x;
+            this.sprite.y = mousePos.y;
         }
     }
 

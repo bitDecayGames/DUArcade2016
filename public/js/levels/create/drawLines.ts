@@ -12,16 +12,16 @@ class DrawLines {
         else this.lines = new MyDrawLines(game);
     }
 
-    private mousePos():Phaser.Point{return new Phaser.Point(this.game.input.x, this.game.input.y)}
+    private mousePos():Phaser.Point{return new Phaser.Point((this.game.camera.position.x - this.game.width / 2) + this.game.input.x, (this.game.camera.position.y - this.game.height / 2) + this.game.input.y)}
 
     update(){
         this.lines.draw(this.mousePos());
         if (this.input.isJustDown(InputType.ACTION)) this.lines.addLine(this.mousePos());
         else if (this.input.isJustDown(InputType.DELETE)) this.lines.removeLastLine();
-        else if (this.input.isJustDown(InputType.LEFT)) this.lines.moveLastPoint(-1, 0);
-        else if (this.input.isJustDown(InputType.RIGHT)) this.lines.moveLastPoint(1, 0);
-        else if (this.input.isJustDown(InputType.UP)) this.lines.moveLastPoint(0, -1);
-        else if (this.input.isJustDown(InputType.DOWN)) this.lines.moveLastPoint(0, 1);
+        else if (this.input.isJustDown(InputType.ARROW_LEFT)) this.lines.moveLastPoint(-1, 0);
+        else if (this.input.isJustDown(InputType.ARROW_RIGHT)) this.lines.moveLastPoint(1, 0);
+        else if (this.input.isJustDown(InputType.ARROW_UP)) this.lines.moveLastPoint(0, -1);
+        else if (this.input.isJustDown(InputType.ARROW_DOWN)) this.lines.moveLastPoint(0, 1);
         else if (this.input.isJustDown(InputType.ESCAPE) && this.callback) {
             this.lines.clearGuideLines();
             this.callback(this.lines);

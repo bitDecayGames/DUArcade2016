@@ -11,18 +11,20 @@ class DrawRectangle {
         this.callback = callback;
         if (rects) this.rects = rects;
         else this.rects = new MyDrawRectangles(game);
+
+        console.log("CameraPosition: " + JSON.stringify(this.game.camera.position));
     }
 
-    private mousePos():Phaser.Point{return new Phaser.Point(this.game.input.x, this.game.input.y)}
+    private mousePos():Phaser.Point{return new Phaser.Point((this.game.camera.position.x - this.game.width / 2) + this.game.input.x, (this.game.camera.position.y - this.game.height / 2) + this.game.input.y)}
 
     update(){
         if (this.input.isJustDown(InputType.ACTION)) this.rects.startNewRect(this.mousePos());
         else if (this.input.isJustUp(InputType.ACTION)) this.rects.addRect();
         else if (this.input.isJustDown(InputType.DELETE)) this.rects.removeLastRect();
-        else if (this.input.isJustDown(InputType.LEFT)) this.rects.moveLastRect(-1, 0);
-        else if (this.input.isJustDown(InputType.RIGHT)) this.rects.moveLastRect(1, 0);
-        else if (this.input.isJustDown(InputType.UP)) this.rects.moveLastRect(0, -1);
-        else if (this.input.isJustDown(InputType.DOWN)) this.rects.moveLastRect(0, 1);
+        else if (this.input.isJustDown(InputType.ARROW_LEFT)) this.rects.moveLastRect(-1, 0);
+        else if (this.input.isJustDown(InputType.ARROW_RIGHT)) this.rects.moveLastRect(1, 0);
+        else if (this.input.isJustDown(InputType.ARROW_UP)) this.rects.moveLastRect(0, -1);
+        else if (this.input.isJustDown(InputType.ARROW_DOWN)) this.rects.moveLastRect(0, 1);
         else if (this.input.isJustDown(InputType.ESCAPE) && this.callback) {
             this.rects.clearCurrentRect();
             this.callback(this.rects);
