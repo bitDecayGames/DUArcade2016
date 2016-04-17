@@ -24,36 +24,40 @@ app.post(LEVEL_ROUTE, bodyParser.json(), function(req, res) {
 
 app.get("/data/levels/:name", function(req, res){ res.download(__dirname + "/../public/data/levels/" + req.params.name) });
 
-// Image asset endpoints
-const IMAGE_ROUTE:string = "/images";
-const IMAGE_DIR:string  = __dirname + "/../public/img";
+// Bulk asset endpoints
+const ASSET_ROUTE:string = "/assets/:dirName";
+const ASSET_DIR:string  = __dirname + "/../public/";
 /*
- * Gets all images in the img directory.
+ * Gets all assets in the specified public directory.
+ *
+ * Use ':' instead of '/' for dirName to go into sub directories.
  *
  * Return format is:
  * {
- *      images: [
- *          {
+ *      assets: [
+ *           {
  *              name: 'foo',
- *              path: 'img/bar/foo.png'
-*           }
+ *              path: 'img/bar/foo.type'
+ *           }
  *      ]
  * }
  */
-app.get(IMAGE_ROUTE, bodyParser.json(), function(req, res) {
-    console.log(IMAGE_ROUTE);
+app.get(ASSET_ROUTE, bodyParser.json(), function(req, res) {
+    var dirName:string = req.params.dirName.replace(":", "/");
 
-    recursive(IMAGE_DIR, function (err, files) {
+    console.log(ASSET_ROUTE.replace(":dirName", dirName));
+
+    recursive(ASSET_DIR + dirName, function (err, files) {
         var fileJson = {
-            images: []
+            assets: []
         };
 
         files.forEach((filePath:string) => {
-            var strippedPath:string = filePath.substr(filePath.indexOf('img'));
+            var strippedPath:string = filePath.substr(filePath.indexOf(dirName));
             var name:string = strippedPath.substr(strippedPath.lastIndexOf("/") + 1);
             name = name.substr(0, name.lastIndexOf("."));
 
-            fileJson.images.push(
+            fileJson.assets.push(
                 {
                     name: name,
                     path: strippedPath

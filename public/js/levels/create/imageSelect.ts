@@ -1,14 +1,17 @@
 class ImageSelect {
     private game:Phaser.Game;
     private input:Input;
-    private spriteLocations:string[];
-    private sprites: Phaser.Sprite[] = [];
+    private spriteLocations:string[][];
+
+    private sprites: Phaser.Sprite[][] = [];
     private spriteGroup: Phaser.Group;
     private callback: (selectedSprite:Phaser.Sprite)=>void;
-    private selectedSpriteIndex = 0;
+    private selectedSpriteIndex: Phaser.Point = new Phaser.Point(0,0);
 
-    private isMoving:boolean = false;
+    private isMovingHorizontal:boolean = false;
+    private isMovingVertical:boolean = false;
     private isMovingLeft:boolean = false;
+    private isMovingUp:boolean = false;
     private _isVisible = false;
 
     private spritesVisible = 5;
@@ -23,7 +26,7 @@ class ImageSelect {
 
     private lastOffset:Phaser.Point;
 
-    constructor(game: Phaser.Game, input: Input, spriteLocations:string[]){
+    constructor(game: Phaser.Game, input: Input, spriteLocations:string[][]){
         this.game = game;
         this.input = input;
         this.spriteLocations = spriteLocations;
@@ -46,13 +49,17 @@ class ImageSelect {
         var halfHeight = this.game.height / 2;
         var halfWidth = this.game.width / 2;
         this.spriteGroup = this.game.add.group();
-        this.spriteLocations.forEach((location:string, index:number) => {
-            var s = this.game.add.sprite((index * this.stepSize) + halfWidth + cameraOffset.x, halfHeight + cameraOffset.y, location, this.spriteGroup);
-            s.anchor.set(0.5, 0.5);
-            s.width = this.spriteSize;
-            s.height = this.spriteSize;
-            s.visible = false;
-            this.sprites.push(s);
+        this.spriteLocations.forEach((set:string[], setNum:number) => {
+            var currentSet = [];
+            this.sprites.push(currentSet);
+            set.forEach((location:string, index:number) => {
+                var s = this.game.add.sprite((index * this.stepSize) + halfWidth + cameraOffset.x, (setNum * this.stepSize) + halfHeight + cameraOffset.y, location, this.spriteGroup);
+                s.anchor.set(0.5, 0.5);
+                s.width = this.spriteSize;
+                s.height = this.spriteSize;
+                s.visible = false;
+                currentSet.push(s);
+            });
         });
         this.selectRect.x += cameraOffset.x;
         this.selectRect.y += cameraOffset.y;
@@ -64,11 +71,13 @@ class ImageSelect {
         var cameraOffset = this.cameraOffset();
         var currentOffset = cameraOffset.clone().subtract(this.lastOffset.x, this.lastOffset.y);
         this.callback = callback;
-        this.sprites.forEach(sprite => {
-            sprite.visible = true;
-            sprite.bringToTop();
-            sprite.x += currentOffset.x;
-            sprite.y += currentOffset.y;
+        this.sprites.forEach(spriteRow => {
+            spriteRow.forEach(sprite => {
+                sprite.visible = true;
+                sprite.bringToTop();
+                sprite.x += currentOffset.x;
+                sprite.y += currentOffset.y;
+            });
         });
         this._isVisible = true;
         this.selectRect.x += currentOffset.x;
@@ -78,41 +87,69 @@ class ImageSelect {
 
     update(){
         this.drawSelectRect();
-        if (this.isMoving) this.moving();
+        if (this.isMovingVertical) this.movingVertical();
+        else if (this.isMovingHorizontal) this.movingHorizontal();
         else {
-            if (this.input.isJustDown(InputType.ARROW_LEFT)) this.move(true);
-            else if (this.input.isJustDown(InputType.ARROW_RIGHT)) this.move(false);
-            else if ((this.input.isJustDown(InputType.SPACE) || this.input.isJustDown(InputType.ESCAPE)) && this.callback) {
+            if (this.input.isJustDown(InputType.ARROW_LEFT)) this.moveHorizontal(true);
+            else if (this.input.isJustDown(InputType.ARROW_RIGHT)) this.moveHorizontal(false);
+            else if (this.input.isJustDown(InputType.ARROW_DOWN)) this.moveVertical(false);
+            else if (this.input.isJustDown(InputType.ARROW_UP)) this.moveVertical(true);
+            else if ((this.input.isJustDown(InputType.SPACE) || this.input.isJustDown(InputType.ESCAPE)) && this.callback && this.sprites[this.selectedSpriteIndex.y][this.selectedSpriteIndex.x]) {
                 this._isVisible = false;
                 this.clearSelectRect();
-                this.sprites.forEach(sprite => {
-                    sprite.visible = false;
-                    sprite.bringToTop()
+                this.sprites.forEach(spriteRow => {
+                    spriteRow.forEach(sprite => {
+                        sprite.visible = false;
+                        sprite.bringToTop()
+                    });
                 });
-                this.callback(this.sprites[this.selectedSpriteIndex]);
+                this.callback(this.sprites[this.selectedSpriteIndex.y][this.selectedSpriteIndex.x]);
             }
         }
     }
 
     isVisible():boolean { return this._isVisible }
 
-    private move(isMovingLeft:boolean){
-        if ((isMovingLeft && this.selectedSpriteIndex + 1 < this.sprites.length) ||
-            (!isMovingLeft && this.selectedSpriteIndex - 1 >= 0)) {
-            this.isMoving = true;
+    private moveHorizontal(isMovingLeft:boolean){
+        if ((isMovingLeft && this.selectedSpriteIndex.x + 1 < this.sprites[this.selectedSpriteIndex.y].length) ||
+            (!isMovingLeft && this.selectedSpriteIndex.x - 1 >= 0)) {
+            this.isMovingHorizontal = true;
             this.isMovingLeft = isMovingLeft;
-            this.selectedSpriteIndex += (isMovingLeft ? 1 : -1);
+            this.selectedSpriteIndex.x += (isMovingLeft ? 1 : -1);
             this.currentMoveStep = 0;
         }
     }
 
-    private moving(){
+    private moveVertical(isMovingUp:boolean){
+        if ((isMovingUp && this.selectedSpriteIndex.y + 1 < this.sprites.length) ||
+            (!isMovingUp && this.selectedSpriteIndex.y - 1 >= 0)) {
+            this.isMovingVertical = true;
+            this.isMovingUp = isMovingUp;
+            this.selectedSpriteIndex.y += (isMovingUp ? 1 : -1);
+            this.currentMoveStep = 0;
+        }
+    }
+
+    private movingHorizontal(){
         if (this.currentMoveStep < this.moveSpeedUpdateSteps){
-            this.sprites.forEach(sprite => {
-                sprite.x += (this.isMovingLeft ? -this.moveStepSize : this.moveStepSize);
+            this.sprites.forEach(spriteRow => {
+                spriteRow.forEach(sprite => {
+                    sprite.x += (this.isMovingLeft ? -this.moveStepSize : this.moveStepSize);
+                });
             });
             this.currentMoveStep += 1;
-        } else this.isMoving = false;
+        } else this.isMovingHorizontal = false;
+    }
+
+    private movingVertical(){
+        if (this.currentMoveStep < this.moveSpeedUpdateSteps){
+           this.sprites.forEach(spriteRow => {
+               spriteRow.forEach(sprite => {
+                    sprite.y += (this.isMovingUp ? -this.moveStepSize : this.moveStepSize);
+                });
+            });
+            this.currentMoveStep += 1;
+        } else this.isMovingVertical = false;
     }
 
     private drawSelectRect(){

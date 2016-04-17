@@ -4,8 +4,12 @@ class DUArcade2016Game extends Phaser.State {
 
     preload() {
         this.load.audio('step', ['../sfx/step_tile.wav']);
-        this.load.json('test-level-0', '../../data/levels/test-level-0.json');
         this.load.json('items', '../../data/interaction/interaction.json');
+
+        var levels = AssetsUtil.getAssetUrls(this.game.cache, Asset.LEVELS);
+        levels.forEach((level) => {
+            this.load.json(level.name, level.path);
+        })
     }
 
     init(levelName:string) {
