@@ -10,7 +10,7 @@ class PaintBrush {
 
     private currentRotationRadians:number = 0;
 
-    snap:number = 10;
+    snap:number = 30;
 
     spriteLocations:string[] = [];
 
@@ -36,18 +36,18 @@ class PaintBrush {
 
     update(){
         if (this._isActive) {
-            var moveAmount = 1;
-            if (this.input.isDown(InputType.SHIFT)) moveAmount = this.snap;
+            var moveAmount = this.snap;
+            if (!this.input.isDown(InputType.SHIFT)) moveAmount = 1;
 
             if (this.currentSpriteStamp && !this.spritePicker.isVisible()) this.currentSpriteStamp.update();
 
             if (this.spritePicker.isVisible()) this.spritePicker.update();
             else if (this.input.isJustDown(InputType.SPACE) && !this.spritePicker.isVisible()) {
+                if (this.currentSpriteStamp) {
+                    this.currentSpriteStamp.destroy();
+                    this.currentSpriteStamp = null;
+                }
                 this.spritePicker.enter(pickedSprite => {
-                    if (this.currentSpriteStamp) {
-                        this.currentSpriteStamp.destroy();
-                        this.currentSpriteStamp = null;
-                    }
                     this.currentSpriteStamp = new Stamp(this.game, this.input, this.game.add.sprite(0, 0, pickedSprite.key), stampedSprite => {
                         this.sprites.push(stampedSprite);
                     }, this.currentRotationRadians);
@@ -60,7 +60,8 @@ class PaintBrush {
             else if (this.input.isJustDown(InputType.RIGHT) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].x += moveAmount;
             else if (this.input.isJustDown(InputType.UP) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y -= moveAmount;
             else if (this.input.isJustDown(InputType.DOWN) && this.sprites.length > 0) this.sprites[this.sprites.length - 1].y += moveAmount;
-            else if (this.input.isJustDown(InputType.ESCAPE) && this.callback) {
+
+            if (this.input.isJustDown(InputType.ESCAPE) && this.callback) {
                 this._isActive = false;
                 if (this.currentSpriteStamp) {
                     this.currentSpriteStamp.destroy();

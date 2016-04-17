@@ -13,7 +13,6 @@ class CreateLevel extends Phaser.State {
     private floorplanLines:MyDrawLines;
     private obstacleBodies:MyDrawRectangles;
     private floor:Phaser.Sprite[] = [];
-    private obstacles:Phaser.Sprite[] = [];
     private north:Phaser.Sprite[] = [];
     private east:Phaser.Sprite[] = [];
     private south:Phaser.Sprite[] = [];
@@ -26,14 +25,53 @@ class CreateLevel extends Phaser.State {
 
         this.myInput = new Input(this.game);
         this.floorBrush = new PaintBrush(this.game, this.myInput, [
-            "floorTile"
+            "large",
+            "small",
+            "rug_10",
+            "rug_2",
+            "rug_4",
+            "rug_8",
+            "rug_12",
+            "rug_3",
+            "rug_6",
+            "rug_9",
+            "rug_center"
         ]);
 
         // Get all walls out of the image json.
         // Some are not in the wall dir, list them manually for now.
         var wallAssets = [
+            "4",
+            "6",
+            "8",
+            "45_4",
+            "45_8",
+            "3060_4",
+            "3060_8",
+            "6030_4",
+            "6030_8",
+            "doorFrame_l",
+            "doorFrame_l_edge",
+            "doorFrame_r",
+            "doorFrame_r_edge",
+            "doorFrame_top",
             "fireplace",
-            "wallBase"
+            // walls are above this line, ceilings are below this line
+            "3",
+            "9",
+            "12",
+            "bl",
+            "br",
+            "tl",
+            "tr",
+            "10",
+            "2",
+            "45_10",
+            "45_2",
+            "3060_10",
+            "3060_2",
+            "6030_10",
+            "6030_2"
         ];
         var images = this.cache.getJSON("images").images;
         images.forEach((image) => {
@@ -83,11 +121,6 @@ class CreateLevel extends Phaser.State {
                         this.drawRectangle = null;
                     }, this.obstacleBodies);
                     break;
-                case EditorState.SCENERY:
-                    this.obstacleBrush.enter(sprites => {
-                        this.obstacles = sprites;
-                    }, this.obstacles);
-                    break;
                 case EditorState.NORTH:
                     this.wallBrush.enter(sprites => {
                         this.north = sprites;
@@ -118,9 +151,9 @@ class CreateLevel extends Phaser.State {
             else this.download();
         }
 
-        this.game.debug.text(EditorState.states[this.editorStateIndex] + (this.editorStateActivated ? " -active-" : ""), 0, 10, "white");
+        if (this.myInput.isJustDown(InputType.ACTION)) this.drawInOrder();
 
-        this.drawInOrder();
+        this.game.debug.text(EditorState.states[this.editorStateIndex] + (this.editorStateActivated ? " -active-" : ""), 0, 10, "white");
     }
 
     private drawInOrder(){
@@ -158,12 +191,7 @@ class CreateLevel extends Phaser.State {
         }
 
         var f = (s:Phaser.Sprite)=>{s.sendToBack()};
-        this.north.forEach(f);
-        this.east.forEach(f);
-        this.south.forEach(f);
-        this.west.forEach(f);
-        this.obstacles.forEach(f);
-        this.floor.forEach(f);
+        this.north.concat().reverse().concat(this.south.concat().reverse()).concat(this.west.concat().reverse()).concat(this.floor.concat().reverse()).forEach(f);
 
     }
 
@@ -188,7 +216,6 @@ class CreateLevel extends Phaser.State {
                 outline: this.floorplanLines.points.map(p => {return {x: p.x, y: p.y}}),
                 obstacles: this.obstacleBodies.rects.map(r => {return {x: r.x, y: r.y, w: r.width, h: r.height}}),
                 floor: this.floor.map(serializeSprites),
-                scenery: this.obstacles.map(serializeSprites)
             },
             north: {
                 scenery: this.north.map(serializeSprites)

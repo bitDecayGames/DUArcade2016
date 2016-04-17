@@ -66,7 +66,7 @@ class ImageSelect {
         else {
             if (this.input.isJustDown(InputType.LEFT)) this.move(true);
             else if (this.input.isJustDown(InputType.RIGHT)) this.move(false);
-            else if (this.input.isJustDown(InputType.ACTION) && this.callback) {
+            else if ((this.input.isJustDown(InputType.SPACE) || this.input.isJustDown(InputType.ESCAPE)) && this.callback) {
                 this._isVisible = false;
                 this.clearSelectRect();
                 this.sprites.forEach(sprite => {
