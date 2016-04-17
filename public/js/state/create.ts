@@ -22,10 +22,19 @@ class CreateLevel extends Phaser.State {
 
 
     preload(){
+        var levels = AssetsUtil.getAssetUrls(this.game.cache, Asset.LEVELS);
+        levels.forEach((level) => {
+            this.load.json(level.name, level.path);
+        });
+    }
+
+    create(){
         this.game.world.setBounds(-1024, -1024, 2048, 2048);
 
         this.floorplanLines = new MyDrawLines(this.game, Phaser.Color.getColor(200, 55, 255));
         this.obstacleBodies = new MyDrawRectangles(this.game, Phaser.Color.getColor(253, 145, 10));
+
+        this.fromJson(this.game.cache.getJSON("level-0"));
 
         this.myInput = new Input(this.game);
         this.floorBrush = new PaintBrush(this.game, this.myInput, [[
@@ -62,9 +71,7 @@ class CreateLevel extends Phaser.State {
         this.obstacleBrush = new PaintBrush(this.game, this.myInput, [
             ["table"]
         ]);
-    }
 
-    create(){
         this.floorBrush.create();
         this.wallBrush.create();
         this.obstacleBrush.create();
@@ -196,40 +203,7 @@ class CreateLevel extends Phaser.State {
     }
 
     save():Promise<string> {
-        var serializeSprites = s=>{return {img: s.key, x: s.x, y: s.y, w: s.width, h: s.height, r: 0}};
-
-        var data = {
-            name: "level-0",
-            camera:{
-                follow: false,
-                viewport: {
-                    x: 0,
-                    y: 0,
-                    w: 200,
-                    h: 200
-                }
-            },
-            load:{
-                imgs: this.floorBrush.spriteLocations.concat(this.wallBrush.spriteLocations).concat(this.obstacleBrush.spriteLocations).flatMap(s => {return s}).filter((value:string, index:number, self:string[])=>{return self.indexOf(value) === index})
-            },
-            floorplan: {
-                outline: this.floorplanLines.points.map(p => {return {x: p.x, y: p.y}}),
-                obstacles: this.obstacleBodies.rects.map(r => {return {x: r.x, y: r.y, w: r.width, h: r.height}}),
-                floor: this.floor.map(serializeSprites),
-            },
-            north: {
-                scenery: this.north.map(serializeSprites)
-            },
-            east: {
-                scenery: this.east.map(serializeSprites)
-            },
-            south: {
-                scenery: this.south.map(serializeSprites)
-            },
-            west: {
-                scenery: this.west.map(serializeSprites)
-            }
-        };
+        var data = this.toJson();
 
         var $:any = window["$"]; // jquery
         return $.ajax({
@@ -240,5 +214,66 @@ class CreateLevel extends Phaser.State {
                 "Content-Type": "application/json"
             }
         });
+    }
+
+    fromJson(json) {
+        var floorplan = json.floorplan;
+        floorplan.outline.forEach((p) => {
+            this.floorplanLines.points.push(Json.deSerializePoint(p));
+        });
+        floorplan.obstacles.forEach((r) => {
+            this.obstacleBodies.rects.push(Json.deSerializeRect(r));
+        });
+        floorplan.floor.forEach((s) => {
+            this.floor.push(Json.deSerializeSprite(this.game, s));
+        });
+
+        json.north.scenery.forEach((s) => {
+            this.north.push(Json.deSerializeSprite(this.game, s));
+        });
+        json.east.scenery.forEach((s) => {
+            this.east.push(Json.deSerializeSprite(this.game, s));
+        });
+        json.south.scenery.forEach((s) => {
+            this.south.push(Json.deSerializeSprite(this.game, s));
+        });
+        json.west.scenery.forEach((s) => {
+            this.west.push(Json.deSerializeSprite(this.game, s));
+        });
+    }
+
+    toJson() {
+        var data = {
+            name: "level-0",
+            /* TODO use this in the future for less asset loading.
+            load: {
+                imgs: this.floorBrush.spriteLocations.concat(this.wallBrush.spriteLocations)
+                    .concat(this.obstacleBrush.spriteLocations).flatMap(s => {
+                    return s
+                }).filter((value:string, index:number, self:string[])=> {
+                    return self.indexOf(value) === index
+                })
+            },
+            */
+            floorplan: {
+                outline: this.floorplanLines.points.map(Json.serializePoint),
+                obstacles: this.obstacleBodies.rects.map(Json.serializeRect),
+                floor: this.floor.map(Json.serializeSprite),
+            },
+            north: {
+                scenery: this.north.map(Json.serializeSprite)
+            },
+            east: {
+                scenery: this.east.map(Json.serializeSprite)
+            },
+            south: {
+                scenery: this.south.map(Json.serializeSprite)
+            },
+            west: {
+                scenery: this.west.map(Json.serializeSprite)
+            }
+        };
+
+        return data;
     }
 }

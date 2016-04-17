@@ -29,40 +29,7 @@ class Level {
         this.orderedFadingRenderGroup.add(this.player.sprite);
         this.game.camera.follow(this.player.sprite);
 
-        this.sprites = [];
-        this.data.floorplan.floor.forEach((s)=>{
-            s.sprite = this.game.add.sprite(s.x, s.y, s.img);
-            s.sprite.width = s.width;
-            s.sprite.height = s.height;
-            s.sprite.rotation = Phaser.Math.degToRad(s.rotation);
-            this.sprites.push(s.sprite);
-            this.game.world.sendToBack(s.sprite);
-        });
-        this.data.getScenery().forEach((s)=>{
-            s.sprite = this.game.add.sprite(s.x, s.y, s.img, 0, this.orderedFadingRenderGroup);
-            s.sprite.width = s.width;
-            s.sprite.height = s.height;
-            s.sprite.rotation = Phaser.Math.degToRad(s.rotation);
-            s.sprite.alpha = 0;
-            this.sprites.push(s.sprite);
-        });
-
-        this.floorbodies = this.game.add.physicsGroup(Phaser.Physics.P2JS);
-        this.data.floorplan.outline.forEach((lastPoint, index)=>{
-            var curPoint = (index + 1 === this.data.floorplan.outline.length ? this.data.floorplan.outline[0] : this.data.floorplan.outline[index + 1]);
-
-            var distance = Phaser.Math.distance(lastPoint.x, lastPoint.y, curPoint.x, curPoint.y);
-            var zeroedCurPoint = curPoint.clone().subtract(lastPoint.x, lastPoint.y);
-            var midPoint = zeroedCurPoint.clone().multiply(0.5, 0.5).add(lastPoint.x, lastPoint.y);
-            var dirNorm = zeroedCurPoint.clone().normalize();
-            var rotation = Phaser.Math.radToDeg(Phaser.Math.angleBetween(0, 0, dirNorm.x, dirNorm.y));
-
-            var body = this.floorbodies.create(midPoint.x, midPoint.y);
-            body.body.setRectangle(distance, 10, 0, 0);
-            body.body.angle = rotation;
-            //body.body.debug = true;
-            body.body.static = true;
-        });
+        this.fromJson();
     }
 
     changeFacing(){
@@ -129,5 +96,42 @@ class Level {
         if (this.isCurrentlyRotating){
             this.changeFacing();
         }
+    }
+
+    fromJson() {
+        this.sprites = [];
+        this.data.floorplan.floor.forEach((s)=> {
+            s.sprite = this.game.add.sprite(s.x, s.y, s.img);
+            s.sprite.width = s.width;
+            s.sprite.height = s.height;
+            s.sprite.rotation = Phaser.Math.degToRad(s.rotation);
+            this.sprites.push(s.sprite);
+            this.game.world.sendToBack(s.sprite);
+        });
+        this.data.getScenery().forEach((s)=> {
+            s.sprite = this.game.add.sprite(s.x, s.y, s.img, 0, this.orderedFadingRenderGroup);
+            s.sprite.width = s.width;
+            s.sprite.height = s.height;
+            s.sprite.rotation = Phaser.Math.degToRad(s.rotation);
+            s.sprite.alpha = 0;
+            this.sprites.push(s.sprite);
+        });
+
+        this.floorbodies = this.game.add.physicsGroup(Phaser.Physics.P2JS);
+        this.data.floorplan.outline.forEach((lastPoint, index)=> {
+            var curPoint = (index + 1 === this.data.floorplan.outline.length ? this.data.floorplan.outline[0] : this.data.floorplan.outline[index + 1]);
+
+            var distance = Phaser.Math.distance(lastPoint.x, lastPoint.y, curPoint.x, curPoint.y);
+            var zeroedCurPoint = curPoint.clone().subtract(lastPoint.x, lastPoint.y);
+            var midPoint = zeroedCurPoint.clone().multiply(0.5, 0.5).add(lastPoint.x, lastPoint.y);
+            var dirNorm = zeroedCurPoint.clone().normalize();
+            var rotation = Phaser.Math.radToDeg(Phaser.Math.angleBetween(0, 0, dirNorm.x, dirNorm.y));
+
+            var body = this.floorbodies.create(midPoint.x, midPoint.y);
+            body.body.setRectangle(distance, 10, 0, 0);
+            body.body.angle = rotation;
+            //body.body.debug = true;
+            body.body.static = true;
+        });
     }
 }

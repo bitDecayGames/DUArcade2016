@@ -9,7 +9,7 @@ class DUArcade2016Game extends Phaser.State {
         var levels = AssetsUtil.getAssetUrls(this.game.cache, Asset.LEVELS);
         levels.forEach((level) => {
             this.load.json(level.name, level.path);
-        })
+        });
     }
 
     init(levelName:string) {
