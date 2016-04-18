@@ -2,7 +2,6 @@ class CreateLevel extends Phaser.State {
     private myInput: Input;
     private floorBrush: PaintBrush;
     private wallBrush: PaintBrush;
-    private obstacleBrush: PaintBrush;
     private drawRectangle: DrawRectangle;
     private drawLines: DrawLines;
 
@@ -34,7 +33,9 @@ class CreateLevel extends Phaser.State {
         this.myInput = new Input(this.game);
         this.floorBrush = new PaintBrush(this.game, this.myInput, [[
             "large",
-            "small",
+            "small"
+        ],[
+            "rug_center",
             "rug_10",
             "rug_2",
             "rug_4",
@@ -42,8 +43,7 @@ class CreateLevel extends Phaser.State {
             "rug_12",
             "rug_3",
             "rug_6",
-            "rug_9",
-            "rug_center"
+            "rug_9"
         ]]);
 
         // Get all walls out of the image json.
@@ -63,15 +63,11 @@ class CreateLevel extends Phaser.State {
         });
 
         this.wallBrush = new PaintBrush(this.game, this.myInput, [wallAssets, itemAssets]);
-        this.obstacleBrush = new PaintBrush(this.game, this.myInput, [
-            ["table"]
-        ]);
     }
 
     create(){
         this.floorBrush.create();
         this.wallBrush.create();
-        this.obstacleBrush.create();
 
         // Save - 1
         this.game.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(this.save, this);
@@ -85,7 +81,6 @@ class CreateLevel extends Phaser.State {
 
         if (this.floorBrush.isActive()) this.floorBrush.update();
         else if (this.wallBrush.isActive()) this.wallBrush.update();
-        else if (this.obstacleBrush.isActive()) this.obstacleBrush.update();
         else if (this.drawRectangle) this.drawRectangle.update();
         else if (this.drawLines) this.drawLines.update();
         else if (this.myInput.isJustDown(InputType.ACTION)) {
@@ -252,7 +247,7 @@ class CreateLevel extends Phaser.State {
                 }
             },
             load:{
-                imgs: this.floorBrush.spriteLocations.concat(this.wallBrush.spriteLocations).concat(this.obstacleBrush.spriteLocations).flatMap(s => {return s}).filter((value:string, index:number, self:string[])=>{return self.indexOf(value) === index})
+                imgs: this.floorBrush.spriteLocations.concat(this.wallBrush.spriteLocations).flatMap(s => {return s}).filter((value:string, index:number, self:string[])=>{return self.indexOf(value) === index})
             },
             floorplan: {
                 outline: this.floorplanLines.points.map(p => {return {x: p.x, y: p.y}}),

@@ -32,6 +32,7 @@ class PaintBrush {
         this.callback = callback;
         if (sprites) this.sprites = sprites;
         if (rotationRadians != null) this.currentRotationRadians = rotationRadians;
+        if (!this.spritePicker.isVisible()) this.openSpritePicker();
     }
 
     isActive(){return this._isActive}
@@ -45,18 +46,7 @@ class PaintBrush {
             if (this.currentSpriteStamp && !this.spritePicker.isVisible()) this.currentSpriteStamp.update();
 
             if (this.spritePicker.isVisible()) this.spritePicker.update();
-            else if (this.input.isJustDown(InputType.SPACE) && !this.spritePicker.isVisible()) {
-                if (this.currentSpriteStamp) {
-                    this.currentSpriteStamp.destroy();
-                    this.currentSpriteStamp = null;
-                }
-                this.spritePicker.enter(pickedSprite => {
-                    this.currentSpriteStamp = new Stamp(this.game, this.input, this.game.add.sprite(0, 0, pickedSprite.key), stampedSprite => {
-                        this.sprites.push(stampedSprite);
-                        this.selectLastSprite();
-                    }, this.currentRotationRadians);
-                });
-            }
+            else if (this.input.isJustDown(InputType.SPACE) && !this.spritePicker.isVisible()) this.openSpritePicker();
             else if (this.input.isJustDown(InputType.DELETE) && curSprite) this.deleteSelectedSprite();
             else if (this.input.isJustDown(InputType.ARROW_LEFT) && curSprite) curSprite.x -= moveAmount;
             else if (this.input.isJustDown(InputType.ARROW_RIGHT) && curSprite) curSprite.x += moveAmount;
@@ -78,6 +68,19 @@ class PaintBrush {
                 this.callback = null;
             }
         }
+    }
+
+    private openSpritePicker(){
+        if (this.currentSpriteStamp) {
+            this.currentSpriteStamp.destroy();
+            this.currentSpriteStamp = null;
+        }
+        this.spritePicker.enter(pickedSprite => {
+            this.currentSpriteStamp = new Stamp(this.game, this.input, this.game.add.sprite(0, 0, pickedSprite.key), stampedSprite => {
+                this.sprites.push(stampedSprite);
+                this.selectLastSprite();
+            }, this.currentRotationRadians);
+        });
     }
 
     private selectedSprite():Phaser.Sprite {

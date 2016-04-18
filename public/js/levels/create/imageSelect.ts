@@ -90,10 +90,10 @@ class ImageSelect {
         if (this.isMovingVertical) this.movingVertical();
         else if (this.isMovingHorizontal) this.movingHorizontal();
         else {
-            if (this.input.isJustDown(InputType.ARROW_LEFT)) this.moveHorizontal(true);
-            else if (this.input.isJustDown(InputType.ARROW_RIGHT)) this.moveHorizontal(false);
-            else if (this.input.isJustDown(InputType.ARROW_DOWN)) this.moveVertical(false);
-            else if (this.input.isJustDown(InputType.ARROW_UP)) this.moveVertical(true);
+            if (this.input.isJustDown(InputType.ARROW_LEFT)) this.moveHorizontal(false);
+            else if (this.input.isJustDown(InputType.ARROW_RIGHT)) this.moveHorizontal(true);
+            else if (this.input.isJustDown(InputType.ARROW_DOWN)) this.moveVertical(true);
+            else if (this.input.isJustDown(InputType.ARROW_UP)) this.moveVertical(false);
             else if ((this.input.isJustDown(InputType.SPACE) || this.input.isJustDown(InputType.ESCAPE)) && this.callback && this.sprites[this.selectedSpriteIndex.y][this.selectedSpriteIndex.x]) {
                 this._isVisible = false;
                 this.clearSelectRect();
