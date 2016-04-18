@@ -49,10 +49,10 @@ class ImageSelect {
         var halfHeight = this.game.height / 2;
         var halfWidth = this.game.width / 2;
         this.spriteGroup = this.game.add.group();
-        this.spriteLocations.forEach((set:string[], setNum:number) => {
+        this.spriteLocations.forEach((spriteSet:string[], setNum:number) => {
             var currentSet = [];
             this.sprites.push(currentSet);
-            set.forEach((location:string, index:number) => {
+            spriteSet.forEach((location:string, index:number) => {
                 var s = this.game.add.sprite((index * this.stepSize) + halfWidth + cameraOffset.x, (setNum * this.stepSize) + halfHeight + cameraOffset.y, location, this.spriteGroup);
                 s.anchor.set(0.5, 0.5);
                 s.width = this.spriteSize;

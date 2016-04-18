@@ -39,7 +39,7 @@ app.get(LEVEL_DOWNLOAD_ROUTE, function(req, res) {
 });
 
 // Bulk asset endpoints
-const ASSET_ROUTE:string = "/assets/:dirName";
+const ASSET_ROUTE:string = "/assets/*";
 const ASSET_DIR:string  = __dirname + "/../public/";
 /*
  * Gets all assets in the specified public directory.
@@ -56,17 +56,19 @@ const ASSET_DIR:string  = __dirname + "/../public/";
  *      ]
  * }
  */
-app.get(ASSET_ROUTE, bodyParser.json(), function(req, res) {
-    var dirName:string = req.params.dirName.replace(":", "/");
-
-    console.log(GET + ASSET_ROUTE.replace(":dirName", dirName));
+app.get(ASSET_ROUTE, bodyParser.json(), function(req, res, next) {
+    var dirName:string = req.url.replace(/(^\/assets\/)/, "");
+    if (!dirName) {
+        next(); // 404 if the dirname is not set
+        return;
+    }
 
     recursive(ASSET_DIR + dirName, function (err, files) {
         var fileJson = {
             assets: []
         };
 
-        files.forEach((filePath:string) => {
+        if (files) files.forEach((filePath:string) => {
             var strippedPath:string = filePath.substr(filePath.indexOf(dirName));
             var name:string = strippedPath.substr(strippedPath.lastIndexOf("/") + 1);
             name = name.substr(0, name.lastIndexOf("."));
@@ -79,7 +81,7 @@ app.get(ASSET_ROUTE, bodyParser.json(), function(req, res) {
             );
         });
 
-        res.send(JSON.stringify(fileJson, undefined, 4));
+        res.send(fileJson);
         res.end();
     });
 });

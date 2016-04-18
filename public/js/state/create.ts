@@ -31,38 +31,17 @@ class CreateLevel extends Phaser.State {
         this.obstacleBodies = new MyDrawRectangles(this.game, Phaser.Color.getColor(253, 145, 10));
 
         this.myInput = new Input(this.game);
-        this.floorBrush = new PaintBrush(this.game, this.myInput, [[
-            "large",
-            "small"
-        ],[
-            "rug_center",
-            "rug_10",
-            "rug_2",
-            "rug_4",
-            "rug_8",
-            "rug_12",
-            "rug_3",
-            "rug_6",
-            "rug_9"
-        ]]);
 
-        // Get all walls out of the image json.
-        // Some are not in the wall dir, list them manually for now.
-        var wallAssets = [];
-
-        var itemAssets = [];
-
-        var images = AssetsUtil.getAssetUrls(this.game.cache, Asset.IMAGES);
-        images.forEach((image) => {
-            if (image.path.includes("walls/")) {
-                wallAssets.push(image.name);
-            }
-            if (image.path.includes("objects/")) {
-                itemAssets.push(image.name);
-            }
+        var images:any[][] = AssetsUtil.getAssetUrls(this.game.cache, Asset.IMAGES).groupBy(i => {
+            var split = i.path.split("\/");
+            return split[split.length - 2];
         });
 
-        this.wallBrush = new PaintBrush(this.game, this.myInput, [wallAssets, itemAssets]);
+        var floorImages = images.filter(i => i[0].path.includes("floors/")).map(s => s.map(i => i.name));
+        this.floorBrush = new PaintBrush(this.game, this.myInput, floorImages);
+
+        var wallImages:string[][] = images.filter(i => i[0].path.includes("walls/")).concat(images.filter(i => i[0].path.includes("objects/"))[0].groupBy(i => i.name.split("_")[0])).map(s => s.map(i => i.name));
+        this.wallBrush = new PaintBrush(this.game, this.myInput, wallImages);
     }
 
     create(){
